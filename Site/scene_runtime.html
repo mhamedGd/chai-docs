@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Chai Documentation</title>
+        <title>Runtime - Chai Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html" class="active"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,53 +173,109 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="home"><a class="header" href="#home">Home</a></h1>
-<p><em><strong>I would like to take a few lines to thank you, oh reader. for choosing to take some time off of your day and check this lightweight and humble engine.
-This engine is the culmination of my very basic understanding of the underworkings of Game Engines
-Beware though for this engine might make you want to pluck your hairs, bear with it.</strong></em></p>
-<h3 id="tools-required"><a class="header" href="#tools-required">Tools Required</a></h3>
+                        <h1 id="runtime"><a class="header" href="#runtime">Runtime</a></h1>
+<p>Runtime is the concept of the Scene's run cycle, The Scene starts with "Start" Then it goes into cycling between "Update" and "Draw" every frame.</p>
+<p><strong>There are 3 different Runtime:</strong></p>
 <ul>
-<li>Go programming language</li>
-<li>A modern web browser</li>
-<li>A tool for hosting local servers (node/python)</li>
+<li>Start</li>
+<li>Update</li>
+<li>Draw</li>
 </ul>
-<h3 id="installation"><a class="header" href="#installation">Installation</a></h3>
-<ul>
-<li>Clone this repo <a href="https://github.com/mhamedGd/chai_examples">Chai Examples</a>.</li>
-<li>Run "go get" in the root directory.</li>
-<li>If you're using vscode then you can start right away, If you're using another code edit then you'd need to configure go for WASM build settings locally.</li>
-</ul>
-<h3 id="specifics"><a class="header" href="#specifics">Specifics</a></h3>
-<ul>
-<li>
-<p>Chai is 2D, Web-focused, and Lightweight engine.</p>
-</li>
-<li>
-<p>It uses WebAssembly through Go's WASM compiler to build Apps for the web.</p>
-</li>
-<li>
-<p>Chai is an ECS based Game Engine. Which means that unlike OOP based Engines, Chai separates Logic from Data. Making the Components and Entities only data holders and identifiers. And having the logic be commonolized (generalized) amongst the specified components.</p>
-</li>
-<li>
-<p>Current Cull Render Benchmark for Quads (no sprites) <a href="https://www.youtube.com/watch?v=YeYom1glrAk&amp;feature=youtu.be">Video</a></p>
-</li>
-</ul>
-<h3 id="run"><a class="header" href="#run">Run</a></h3>
-<p><strong>In the "Chai Examples" folder, run:</strong></p>
-<ul>
-<li><strong>make build</strong> <em>Building the project</em></li>
-<li><strong>make serve</strong> <em>Creating a local server for the project and opening it in the browser</em></li>
-<li><strong>make run</strong> <em>Combines build and serve</em></li>
-</ul>
+<h3 id="start"><a class="header" href="#start">Start</a></h3>
+<p>Start is called only once, At the start of the scene. It's useful for setting up the scene and creating Entities and Components.</p>
+<p><strong>Adding A Start Runtime System</strong></p>
+<pre><code class="language-go">func CustomSystem(_this_scene *chai.Scene) {
+
+}
+</code></pre>
+<pre><code class="language-go">OnStart: func(){
+    _test_scene := chai.NewScene()
+
+    _test_scene.NewStartSystem(CustomSystem)
+}
+</code></pre>
+<p>The first code is how you make a Start Runtime System. You just create a normal function and as a parameter you give a pointer of the scene this system will running on.</p>
+<pre><code class="language-go">import (
+	chai "github.com/mhamedGd/chai"
+)
+
+func CustomSystem(_this_scene *chai.Scene) {
+    chai.LogF("Chai!!")
+}
+
+var app chai.App = chai.App{
+    Title: "Docs",
+    Width: 480,
+    Height: 480,
+    OnStart: func(){
+        _test_scene := chai.NewScene()
+        _test_scene.NewStartSystem(CustomSystem)
+
+// Transition into this scene
+        chai.ChangeScene(&amp;_test_scene)
+    },
+}
+
+func main(){
+    chai.Run(&amp;app)
+}
+</code></pre>
+<p>Try then to run it "make run"</p>
+<p>Now the Output Should be like this</p>
+<p><img src="../resources/start_runtime.png" alt="Start Output" /></p>
+<h3 id="update"><a class="header" href="#update">Update</a></h3>
+<p>Update just like Start is a runtime of Scene, but unlike Start it runs for every frame after Start, It's useful for game logic,</p>
+<p><strong>Adding An Update Runtime System</strong></p>
+<pre><code class="language-go">func CustomUpdateSystem(_this_scene *chai.Scene, _dt float32) {
+
+}
+</code></pre>
+<pre><code class="language-go">OnStart: func(){
+    _test_scene := chai.NewScene()
+
+    _test_scene.NewUpdateSystem(CustomUpdateSystem)
+}
+</code></pre>
+<p>Notice how here the Update Runtime System takes 2 parameters, not 1.
+The first is a reference to the Scene the System is running on, While the Second is the delta-time of the updated frame.</p>
+<pre><code class="language-go">import (
+	chai "github.com/mhamedGd/chai"
+)
+
+func CustomUpdateSystem(_this_scene *chai.Scene, _dt float32) {
+    chai.LogF("Chai Deltatime: %v", _dt)
+}
+
+var app chai.App = chai.App{
+    Title: "Docs",
+    Width: 480,
+    Height: 480,
+    OnStart: func(){
+        _test_scene := chai.NewScene()
+        _test_scene.NewUpdateSystem(CustomUpdateSystem)
+
+// Transition into this scene
+        chai.ChangeScene(&amp;_test_scene)
+    },
+}
+
+func main(){
+    chai.Run(&amp;app)
+}
+</code></pre>
+<p>Try it now with "make run"</p>
+<p><img src="../resources/update_runtime.png" alt="Update Runtime" /></p>
+<h3 id="draw"><a class="header" href="#draw">Draw</a></h3>
+<p>Draw is almost exactly the same as Update, the Difference is that it runs after Update in the Scene Life Cycle.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-
-                            <a rel="next prefetch" href="application.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="scene.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
+
 
                         <div style="clear: both"></div>
                     </nav>
@@ -227,10 +283,10 @@ Beware though for this engine might make you want to pluck your hairs, bear with
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-
-                    <a rel="next prefetch" href="application.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="prev" href="scene.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
+
             </nav>
 
         </div>

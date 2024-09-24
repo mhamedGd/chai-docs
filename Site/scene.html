@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Chai Documentation</title>
-        <base href="/">
+        <title>Scene - Chai Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -89,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html" class="active"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -174,14 +173,84 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
+<pre><code class="language-go">type Scene struct {
+	Background     RGBA8
+	Ecs_World      *ecs.World
+	start_systems  List[func(*Scene)]
+	update_systems List[func(*Scene, float32)]
+	render_systems List[func(*Scene, float32)]
+	tags           Map[string, List[EntId]]
+}
+
+</code></pre>
+<p>A scene is the container of your level's objects and logic. It is on align with Unity's understanding of a scene, Which states that scenes and objects (prefabs) are separate unlike Godot's.</p>
+<p>You can create a scene inside an App's OnStart method.</p>
+<pre><code class="language-go">OnStart: func(){
+    _test_scene := chai.NewScene()
+}
+</code></pre>
+<p>As we mentioned Chai is an ECS based Game Engine, Which means that Objects only contain data, while the logic is cluttered somewhere else</p>
+<p>It goes like this</p>
+<ul>
+<li>Components are data holders (name, position, uv, speed, etc...)</li>
+<li>Entities are Identifiers that point towards the specific component</li>
+<li>Systems use the Entities to Get All the Components you would want to do logic on.</li>
+</ul>
+<h3 id="entities"><a class="header" href="#entities"><strong>Entities</strong></a></h3>
+<p>An Entity is just an Id (uint32), Entities can be seen as a key in a dictionary. The key points to a specific value. And as such you can retrieve and manipulate the value thanks to the key pointing to its location.</p>
+<p>In Game Engines, You'd typically think of Entities as Objects that hold <strong>Data</strong> and perform <strong>Logic</strong>. In ECS this definition would get dissected.</p>
+<p><strong>Creating An Entity</strong> is very easy,</p>
+<pre><code class="language-go">_entity := _test_scene.NewEntityId()
+</code></pre>
+<h3 id="components"><a class="header" href="#components"><strong>Components</strong></a></h3>
+<p>A Component is any piece of data. Whether that be a struct or a native type, It can be turned into a component</p>
+<pre><code class="language-go">type CustomComponent struct{
+    u int
+}
+</code></pre>
+<pre><code class="language-go">_entity := _test_scene_NewEntityId()
+_component := CustomComponent{
+    u: 0
+}
+_test_scene.AddComponents(_entity, chai.ToComponent(_component))
+</code></pre>
+<p>With this, The Engine has acknowledged that on this Scene, The component "_component" has been attached to this Identifier "_entity".</p>
+<p><strong>Now how do we manipulate the component?</strong>
+In Unity it would be something like getting a reference of the component in your script and then use it inside the script itself.</p>
+<p>In Godot, You would either use the Node you've attached the script to or Get a reference to the Node you would want to manipulate.</p>
+<p>Chai also needs to get a reference to the Component to use it like any other Engine, but the way we do that is different, Which takes us to <strong>Systems</strong>.</p>
+<h3 id="systems"><a class="header" href="#systems"><strong>Systems</strong></a></h3>
+<p>Systems are basically functions. They perform just like you would perform a function being called inside "Start" or "Update" in Unity(_ready, _process in Godot).</p>
+<p><strong>Writing A System</strong></p>
+<pre><code class="language-go">func CustomSystem(_this_scene *chai.Scene) {
+    chai.LogF("Chaiiii")
+}
+</code></pre>
+<p>Then you would need to add it to the scene.</p>
+<pre><code class="language-go">_entity := _test_scene_NewEntityId()
+_component := CustomComponent{
+    u: 0
+}
+_test_scene.AddComponents(_entity, chai.ToComponent(_component))
+
+_test_scene.NewStartSystem(CustomSystem)
+</code></pre>
+<p><strong>NewStartSystem</strong> is exactly that, It adds the System we just created into the Scene's Start runtime
+Now what is a <strong>Scene runtime</strong>?</p>
+<p>We'll be talking about it next.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="application.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="scene_runtime.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -189,7 +258,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="application.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="scene_runtime.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

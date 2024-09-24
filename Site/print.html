@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -178,6 +178,8 @@
 <p><em><strong>I would like to take a few lines to thank you, oh reader. for choosing to take some time off of your day and check this lightweight and humble engine.
 This engine is the culmination of my very basic understanding of the underworkings of Game Engines
 Beware though for this engine might make you want to pluck your hairs, bear with it.</strong></em></p>
+<!-- ![Chai Logo](../resources/Chai_Logo_transparent.png) -->
+<img src="../resources/Chai_Logo_transparent.png" class="logo">
 <h3 id="tools-required"><a class="header" href="#tools-required">Tools Required</a></h3>
 <ul>
 <li>Go programming language</li>
@@ -242,6 +244,166 @@ It can be declared as a variable of type App.</p>
 </code></pre>
 <p>If you try running <strong>make run</strong>, You'll get a looooong stream of errors in the console of the page. If you go all the way to the top you'll eventually see "Scene is set to none".</p>
 <p>So next, we'll be discussing scenes.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
+<pre><code class="language-go">type Scene struct {
+	Background     RGBA8
+	Ecs_World      *ecs.World
+	start_systems  List[func(*Scene)]
+	update_systems List[func(*Scene, float32)]
+	render_systems List[func(*Scene, float32)]
+	tags           Map[string, List[EntId]]
+}
+
+</code></pre>
+<p>A scene is the container of your level's objects and logic. It is on align with Unity's understanding of a scene, Which states that scenes and objects (prefabs) are separate unlike Godot's.</p>
+<p>You can create a scene inside an App's OnStart method.</p>
+<pre><code class="language-go">OnStart: func(){
+    _test_scene := chai.NewScene()
+}
+</code></pre>
+<p>As we mentioned Chai is an ECS based Game Engine, Which means that Objects only contain data, while the logic is cluttered somewhere else</p>
+<p>It goes like this</p>
+<ul>
+<li>Components are data holders (name, position, uv, speed, etc...)</li>
+<li>Entities are Identifiers that point towards the specific component</li>
+<li>Systems use the Entities to Get All the Components you would want to do logic on.</li>
+</ul>
+<h3 id="entities"><a class="header" href="#entities"><strong>Entities</strong></a></h3>
+<p>An Entity is just an Id (uint32), Entities can be seen as a key in a dictionary. The key points to a specific value. And as such you can retrieve and manipulate the value thanks to the key pointing to its location.</p>
+<p>In Game Engines, You'd typically think of Entities as Objects that hold <strong>Data</strong> and perform <strong>Logic</strong>. In ECS this definition would get dissected.</p>
+<p><strong>Creating An Entity</strong> is very easy,</p>
+<pre><code class="language-go">_entity := _test_scene.NewEntityId()
+</code></pre>
+<h3 id="components"><a class="header" href="#components"><strong>Components</strong></a></h3>
+<p>A Component is any piece of data. Whether that be a struct or a native type, It can be turned into a component</p>
+<pre><code class="language-go">type CustomComponent struct{
+    u int
+}
+</code></pre>
+<pre><code class="language-go">_entity := _test_scene_NewEntityId()
+_component := CustomComponent{
+    u: 0
+}
+_test_scene.AddComponents(_entity, chai.ToComponent(_component))
+</code></pre>
+<p>With this, The Engine has acknowledged that on this Scene, The component "_component" has been attached to this Identifier "_entity".</p>
+<p><strong>Now how do we manipulate the component?</strong>
+In Unity it would be something like getting a reference of the component in your script and then use it inside the script itself.</p>
+<p>In Godot, You would either use the Node you've attached the script to or Get a reference to the Node you would want to manipulate.</p>
+<p>Chai also needs to get a reference to the Component to use it like any other Engine, but the way we do that is different, Which takes us to <strong>Systems</strong>.</p>
+<h3 id="systems"><a class="header" href="#systems"><strong>Systems</strong></a></h3>
+<p>Systems are basically functions. They perform just like you would perform a function being called inside "Start" or "Update" in Unity(_ready, _process in Godot).</p>
+<p><strong>Writing A System</strong></p>
+<pre><code class="language-go">func CustomSystem(_this_scene *chai.Scene) {
+    chai.LogF("Chaiiii")
+}
+</code></pre>
+<p>Then you would need to add it to the scene.</p>
+<pre><code class="language-go">_entity := _test_scene_NewEntityId()
+_component := CustomComponent{
+    u: 0
+}
+_test_scene.AddComponents(_entity, chai.ToComponent(_component))
+
+_test_scene.NewStartSystem(CustomSystem)
+</code></pre>
+<p><strong>NewStartSystem</strong> is exactly that, It adds the System we just created into the Scene's Start runtime
+Now what is a <strong>Scene runtime</strong>?</p>
+<p>We'll be talking about it next.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="runtime"><a class="header" href="#runtime">Runtime</a></h1>
+<p>Runtime is the concept of the Scene's run cycle, The Scene starts with "Start" Then it goes into cycling between "Update" and "Draw" every frame.</p>
+<p><strong>There are 3 different Runtime:</strong></p>
+<ul>
+<li>Start</li>
+<li>Update</li>
+<li>Draw</li>
+</ul>
+<h3 id="start"><a class="header" href="#start">Start</a></h3>
+<p>Start is called only once, At the start of the scene. It's useful for setting up the scene and creating Entities and Components.</p>
+<p><strong>Adding A Start Runtime System</strong></p>
+<pre><code class="language-go">func CustomSystem(_this_scene *chai.Scene) {
+
+}
+</code></pre>
+<pre><code class="language-go">OnStart: func(){
+    _test_scene := chai.NewScene()
+
+    _test_scene.NewStartSystem(CustomSystem)
+}
+</code></pre>
+<p>The first code is how you make a Start Runtime System. You just create a normal function and as a parameter you give a pointer of the scene this system will running on.</p>
+<pre><code class="language-go">import (
+	chai "github.com/mhamedGd/chai"
+)
+
+func CustomSystem(_this_scene *chai.Scene) {
+    chai.LogF("Chai!!")
+}
+
+var app chai.App = chai.App{
+    Title: "Docs",
+    Width: 480,
+    Height: 480,
+    OnStart: func(){
+        _test_scene := chai.NewScene()
+        _test_scene.NewStartSystem(CustomSystem)
+
+// Transition into this scene
+        chai.ChangeScene(&amp;_test_scene)
+    },
+}
+
+func main(){
+    chai.Run(&amp;app)
+}
+</code></pre>
+<p>Try then to run it "make run"</p>
+<p>Now the Output Should be like this</p>
+<p><img src="../resources/start_runtime.png" alt="Start Output" /></p>
+<h3 id="update"><a class="header" href="#update">Update</a></h3>
+<p>Update just like Start is a runtime of Scene, but unlike Start it runs for every frame after Start, It's useful for game logic,</p>
+<p><strong>Adding An Update Runtime System</strong></p>
+<pre><code class="language-go">func CustomUpdateSystem(_this_scene *chai.Scene, _dt float32) {
+
+}
+</code></pre>
+<pre><code class="language-go">OnStart: func(){
+    _test_scene := chai.NewScene()
+
+    _test_scene.NewUpdateSystem(CustomUpdateSystem)
+}
+</code></pre>
+<p>Notice how here the Update Runtime System takes 2 parameters, not 1.
+The first is a reference to the Scene the System is running on, While the Second is the delta-time of the updated frame.</p>
+<pre><code class="language-go">import (
+	chai "github.com/mhamedGd/chai"
+)
+
+func CustomUpdateSystem(_this_scene *chai.Scene, _dt float32) {
+    chai.LogF("Chai Deltatime: %v", _dt)
+}
+
+var app chai.App = chai.App{
+    Title: "Docs",
+    Width: 480,
+    Height: 480,
+    OnStart: func(){
+        _test_scene := chai.NewScene()
+        _test_scene.NewUpdateSystem(CustomUpdateSystem)
+
+// Transition into this scene
+        chai.ChangeScene(&amp;_test_scene)
+    },
+}
+
+func main(){
+    chai.Run(&amp;app)
+}
+</code></pre>
+<p>Try it now with "make run"</p>
+<p><img src="../resources/update_runtime.png" alt="Update Runtime" /></p>
+<h3 id="draw"><a class="header" href="#draw">Draw</a></h3>
+<p>Draw is almost exactly the same as Update, the Difference is that it runs after Update in the Scene Life Cycle.</p>
 
                     </main>
 
