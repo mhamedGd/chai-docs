@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">5.</strong> Chai Components</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -511,6 +511,7 @@ func CustomSceneStart(_this_scene *chai.Scene) {
 </code></pre>
 <p><strong>output</strong>
 <img src="ECS/../../resources/get_component_ptr.png" alt="Get ComponentPtr Output" /></p>
+<h3 id="keep-in-mind-that-a-components-pointer-might-change-everytime-you-add-a-new-component-so-it-is-not-advised-to-keep-the-pointer-stored-in-a-variable-for-you-to-use-it-throughout-the-applications-lifetime"><a class="header" href="#keep-in-mind-that-a-components-pointer-might-change-everytime-you-add-a-new-component-so-it-is-not-advised-to-keep-the-pointer-stored-in-a-variable-for-you-to-use-it-throughout-the-applications-lifetime">Keep in mind that a Component's Pointer might change everytime you add a new Component, So it is not advised to keep the pointer stored in a variable for you to use it throughout the Application's Lifetime.</a></h3>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="system"><a class="header" href="#system">System</a></h1>
 <p>Systems are the executers of logic. They are the equivalent of "void Start", void "Update" in Unity, They hook unto the main application loop. Using Systems you can easily implement features in your game thanks to their flexible and modular usage.
 In a Scene, there are 3 runtimes:</p>
@@ -645,8 +646,115 @@ func main(){
 </li>
 <li>Then we run the app in main</li>
 </ul>
-<hr />
-<p>WIP</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
+<p>Iteratos are a way provided by the ECS Engine to iterate over Entities that have X Component attached to it.</p>
+<p>Let's say you created a new Entity and attached a Rigidbody Component to it. Now in Update you want to apply continuos force to that Rigidbody. How would you go about that? Would you need to get that Component's Pointer every-frame? That seems like a lot of processing overhead.</p>
+<p>And here comes the usefulness of ECS Iterators.</p>
+<p>Check this Example.</p>
+<pre><code class="language-go">type CustomComponent struct {
+    data int
+}
+
+func IterateStartSystem(_this_scene *chai.Scene) {
+    _this_scene.NewUpdateSystem(RectUpdateSystem)
+
+    _entity := _this_scene.NewEntityId()
+    _custom_component := CustomComponent{data: 10}
+    _this_scene.AddComponents(_entity, chai.ToComponent(_custom_component))
+}
+
+func IterateUpdateSystem(_this_scene *chai.Scene, _delta float32) {
+    chai.Iterate1[CustomComponent](func(i ecs.Id, c *CustomComponent){
+        chai.LogF("CustomComponent: %v", c.data)
+    })
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(IterateStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<p><strong>output</strong></p>
+<p><img src="ECS/../../resources/iterate_1.png" alt="Iterate1 Example Output" /></p>
+<p>We need to explain a few statements in the previous example.</p>
+<p>We can see the usual of subsribing a Start runtime function and an Update runtime function, and then we create a new Entity and attach a custom component.
+In "IterateUpdateSystem" we see that we're calling a new function "Iterat1" that takes a generic of type [CustomComponent] and as a parameter it takes a function that needs 2 parameters, <strong>1st is an Entity id, and 2nd is a pointer to "CustomComponent".</strong></p>
+<p>What Iterate1[CustomComponent] does is it <strong>iterates on all entities with a CustomComponent type Component attached to it</strong> and then it executes the callback provided in it as a parameter:</p>
+<pre><code>Iterate[CustomComponent](A Function that does something with the Entity)
+</code></pre>
+<p>and the callback function provides 2 parameters, 1st is the Entity that has CustomComponent attached and 2nd is a pointer to the CustomComponent attached to it.</p>
+<p><em>You don't have to use a closure function, You can provide an external function that takes the same parameters as the closure does</em></p>
+<h3 id="multiple-components"><a class="header" href="#multiple-components">Multiple Components?</a></h3>
+<p>You can iterate over Entities with more than 1 Component using</p>
+<pre><code>chai.Iterate2[A, B](func(i ecs.Id, a *A, b *B))
+chai.Iterate3[A, B, C](func(i ecs.Id, a *A, b *B, c *C))
+chai.Iterate4[A, B, C, D](func(i ecs.Id, a *A, b *B, c *C, d *D))
+chai.Iterate4[A, B, C, D, E](func(i ecs.Id, a *A, b *B, c *C, d *D, e *E))
+</code></pre>
+<p>You can use any of the previous functions to iterate over entities that contain the provided components inside the brackets "[]".</p>
+<p><strong>chai.Iterate1[A], Iterates over all Entities who have this Component attached to them and not Entities who only have this Component attached to them</strong>, the other Iterate functions work the same way.</p>
+<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<p>Let's use what we learned so far to create an App that draws 3 rects.</p>
+<pre><code class="language-go">type CustomComponent struct {
+    xOffset float32
+}
+
+func RectStartSystem(_this_scene *chai.Scene) {
+    _this_scene.NewRenderSystem(RectRenderSystem)
+    chai.Shapes.LineWidth = 1.5
+    
+    _entity1 := _this_scene.NewEntityId()
+    _custom_component1 := CustomComponent{xOffset: 120}
+    _this_scene.AddComponents(_entity1, chai.ToComponent(_custom_component1))
+    
+    _entity2 := _this_scene.NewEntityId()
+    _custom_component2 := CustomComponent{xOffset: 0}
+    _this_scene.AddComponents(_entity2, chai.ToComponent(_custom_component2))
+    
+    _entity3 := _this_scene.NewEntityId()
+    _custom_component3 := CustomComponent{xOffset: -120}
+    _this_scene.AddComponents(_entity3, chai.ToComponent(_custom_component3))
+}
+
+func RectRenderSystem(_this_scene *chai.Scene, _delta float32) {
+    chai.Iterate1[CustomComponent](func(i ecs.Id, c *CustomComponent){
+        chai.Shapes.DrawRectRotated(chai.NewVector2f(c.xOffset, 0.0), 0.0, chai.NewVector2f(20.0, 20.0), chai.WHITE, 0.0)
+    })
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(RectStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<p><strong>output</strong></p>
+<p><img src="ECS/../../resources/iterator_rect.png" alt="Iterator&amp;Entity Example" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chai-components"><a class="header" href="#chai-components">Chai Components</a></h1>
+<p>There's a number of Components provided by Chai that completes the Game Development Experience. All the Components listed next are not necessary if you want to use Chai as a framework, but if you to use Chai as an engine then please use what I wroked hard to make.</p>
 
                     </main>
 

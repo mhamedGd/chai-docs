@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Application - Chai Documentation</title>
+        <title>Iterators - Chai Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -12,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -35,7 +35,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html" class="active"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">5.</strong> Chai Components</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="../scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="../ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="../ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="../ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="../ECS/iterators.html" class="active"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="../chai_components.html"><strong aria-hidden="true">5.</strong> Chai Components</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -144,7 +144,7 @@
                     <h1 class="menu-title">Chai Documentation</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -173,46 +173,123 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="application"><a class="header" href="#application">Application</a></h1>
-<pre><code class="language-go">type App struct {
-	Width    int
-	Height   int
-	Title    string
-	OnStart  func()
-	OnUpdate func(float32)
-	OnDraw   func(float32)
-	OnEvent  func(*AppEvent)
+                        <h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
+<p>Iteratos are a way provided by the ECS Engine to iterate over Entities that have X Component attached to it.</p>
+<p>Let's say you created a new Entity and attached a Rigidbody Component to it. Now in Update you want to apply continuos force to that Rigidbody. How would you go about that? Would you need to get that Component's Pointer every-frame? That seems like a lot of processing overhead.</p>
+<p>And here comes the usefulness of ECS Iterators.</p>
+<p>Check this Example.</p>
+<pre><code class="language-go">type CustomComponent struct {
+    data int
+}
+
+func IterateStartSystem(_this_scene *chai.Scene) {
+    _this_scene.NewUpdateSystem(RectUpdateSystem)
+
+    _entity := _this_scene.NewEntityId()
+    _custom_component := CustomComponent{data: 10}
+    _this_scene.AddComponents(_entity, chai.ToComponent(_custom_component))
+}
+
+func IterateUpdateSystem(_this_scene *chai.Scene, _delta float32) {
+    chai.Iterate1[CustomComponent](func(i ecs.Id, c *CustomComponent){
+        chai.LogF("CustomComponent: %v", c.data)
+    })
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(IterateStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
 }
 </code></pre>
-<p>An application is Chai's main entry point. It contains your App's info and life cycle.
-It can be declared as a variable of type App.</p>
-<pre><code class="language-go">var app chai.App = chai.App {
-    Title: "",
-    Width: 1920,
-    Height: 1080,
-    OnStart: func(){},
-    OnUpdate: func(_delta_time float32){},
-    OnDraw: func(_delta_time float32){},
-    OnEvent func(_event *AppEvent){},
+<p><strong>output</strong></p>
+<p><img src="../../resources/iterate_1.png" alt="Iterate1 Example Output" /></p>
+<p>We need to explain a few statements in the previous example.</p>
+<p>We can see the usual of subsribing a Start runtime function and an Update runtime function, and then we create a new Entity and attach a custom component.
+In "IterateUpdateSystem" we see that we're calling a new function "Iterat1" that takes a generic of type [CustomComponent] and as a parameter it takes a function that needs 2 parameters, <strong>1st is an Entity id, and 2nd is a pointer to "CustomComponent".</strong></p>
+<p>What Iterate1[CustomComponent] does is it <strong>iterates on all entities with a CustomComponent type Component attached to it</strong> and then it executes the callback provided in it as a parameter:</p>
+<pre><code>Iterate[CustomComponent](A Function that does something with the Entity)
+</code></pre>
+<p>and the callback function provides 2 parameters, 1st is the Entity that has CustomComponent attached and 2nd is a pointer to the CustomComponent attached to it.</p>
+<p><em>You don't have to use a closure function, You can provide an external function that takes the same parameters as the closure does</em></p>
+<h3 id="multiple-components"><a class="header" href="#multiple-components">Multiple Components?</a></h3>
+<p>You can iterate over Entities with more than 1 Component using</p>
+<pre><code>chai.Iterate2[A, B](func(i ecs.Id, a *A, b *B))
+chai.Iterate3[A, B, C](func(i ecs.Id, a *A, b *B, c *C))
+chai.Iterate4[A, B, C, D](func(i ecs.Id, a *A, b *B, c *C, d *D))
+chai.Iterate4[A, B, C, D, E](func(i ecs.Id, a *A, b *B, c *C, d *D, e *E))
+</code></pre>
+<p>You can use any of the previous functions to iterate over entities that contain the provided components inside the brackets "[]".</p>
+<p><strong>chai.Iterate1[A], Iterates over all Entities who have this Component attached to them and not Entities who only have this Component attached to them</strong>, the other Iterate functions work the same way.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>Let's use what we learned so far to create an App that draws 3 rects.</p>
+<pre><code class="language-go">type CustomComponent struct {
+    xOffset float32
+}
+
+func RectStartSystem(_this_scene *chai.Scene) {
+    _this_scene.NewRenderSystem(RectRenderSystem)
+    chai.Shapes.LineWidth = 1.5
+    
+    _entity1 := _this_scene.NewEntityId()
+    _custom_component1 := CustomComponent{xOffset: 120}
+    _this_scene.AddComponents(_entity1, chai.ToComponent(_custom_component1))
+    
+    _entity2 := _this_scene.NewEntityId()
+    _custom_component2 := CustomComponent{xOffset: 0}
+    _this_scene.AddComponents(_entity2, chai.ToComponent(_custom_component2))
+    
+    _entity3 := _this_scene.NewEntityId()
+    _custom_component3 := CustomComponent{xOffset: -120}
+    _this_scene.AddComponents(_entity3, chai.ToComponent(_custom_component3))
+}
+
+func RectRenderSystem(_this_scene *chai.Scene, _delta float32) {
+    chai.Iterate1[CustomComponent](func(i ecs.Id, c *CustomComponent){
+        chai.Shapes.DrawRectRotated(chai.NewVector2f(c.xOffset, 0.0), 0.0, chai.NewVector2f(20.0, 20.0), chai.WHITE, 0.0)
+    })
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(RectStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
 }
 </code></pre>
-<p>In order to run the Application, All You have to do is call "chai.Run(<em>application_variable_pointer</em>)" in the main file of your go project.</p>
-<pre><code class="language-go">func main() {
-    chai.Run(&amp;app)
-}
-</code></pre>
-<p>If you try running <strong>make run</strong>, You'll get a looooong stream of errors in the console of the page. If you go all the way to the top you'll eventually see "Scene is set to none".</p>
-<p>So next, we'll be discussing scenes.</p>
+<p><strong>output</strong></p>
+<p><img src="../../resources/iterator_rect.png" alt="Iterator&amp;Entity Example" /></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../ECS/system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="scene.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../chai_components.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -222,11 +299,11 @@ It can be declared as a variable of type App.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../ECS/system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="scene.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../chai_components.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -241,13 +318,13 @@ It can be declared as a variable of type App.</p>
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 
