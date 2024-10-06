@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html" class="active"><strong aria-hidden="true">5.</strong> Chai Components</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html" class="active"><strong aria-hidden="true">5.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Components/visual_transform.html"><strong aria-hidden="true">5.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="Components/sprite_component.html"><strong aria-hidden="true">5.2.</strong> SpriteComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Chai Data Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="DataTypes/vector2f.html"><strong aria-hidden="true">6.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="DataTypes/rgba8.html"><strong aria-hidden="true">6.2.</strong> RGBA8</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Resources/texture.html"><strong aria-hidden="true">7.1.</strong> Texture</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -174,7 +174,25 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="chai-components"><a class="header" href="#chai-components">Chai Components</a></h1>
+<p>Just like you can create Components, So can the Author of Chai. He especially created some Comopnents to ease your experience in Chai.</p>
 <p>There's a number of Components provided by Chai that completes the Game Development Experience. All the Components listed next are not necessary if you want to use Chai as a framework, but if you to use Chai as an engine then please use what I wroked hard to make.</p>
+<p>Some components are necessary for almost every Entity, some are required for accessing some functionalities in Chai.</p>
+<p><em><strong>It's important to note that all Chai authored Componenets follow the naming convention of suffixing the Component's name with the word "Component", except for VisualTransform.</strong></em></p>
+<p><em>Moreover all Chai authored Components have builder functions that follow the Convention "New" + Name of Component, With the exception of this rule being the "VisualTransform" Component as well.</em></p>
+<p><strong>Components:</strong></p>
+<ul>
+<li><a href="./Components/visual_transform.html">VisualTransform</a></li>
+<li><a href="./Components/sprite_component.html">SpriteComponent</a></li>
+<li><a href="./Components/quad_component.html">QuadComponent</a></li>
+<li><a href="./Components/line_component.html">LineComponent</a></li>
+<li><a href="./Components/font_render_component.html">FontRender</a></li>
+<li><a href="./Components/sprite_animation_component.html">SpriteAnimationComponent</a></li>
+<li><a href="./Components/animation_component.html">AnimationComponent</a></li>
+<li><a href="./Components/dynamic_body_component.html">DynamicBodyComponent</a></li>
+<li><a href="./Components/static_body_component.html">StaticBodyComponent</a></li>
+<li><a href="./Components/kinematic_body_component.html">KinematicBodyComponent</a></li>
+<li><a href="./Components/audio_source_component.html">AudioSourceComponent</a></li>
+</ul>
 
                     </main>
 
@@ -184,6 +202,9 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="Components/visual_transform.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -195,6 +216,9 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="Components/visual_transform.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

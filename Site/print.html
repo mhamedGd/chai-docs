@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">5.</strong> Chai Components</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">5.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Components/visual_transform.html"><strong aria-hidden="true">5.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="Components/sprite_component.html"><strong aria-hidden="true">5.2.</strong> SpriteComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Chai Data Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="DataTypes/vector2f.html"><strong aria-hidden="true">6.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="DataTypes/rgba8.html"><strong aria-hidden="true">6.2.</strong> RGBA8</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Resources/texture.html"><strong aria-hidden="true">7.1.</strong> Texture</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -754,7 +754,290 @@ func main(){
 <p><strong>output</strong></p>
 <p><img src="ECS/../../resources/iterator_rect.png" alt="Iterator&amp;Entity Example" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chai-components"><a class="header" href="#chai-components">Chai Components</a></h1>
+<p>Just like you can create Components, So can the Author of Chai. He especially created some Comopnents to ease your experience in Chai.</p>
 <p>There's a number of Components provided by Chai that completes the Game Development Experience. All the Components listed next are not necessary if you want to use Chai as a framework, but if you to use Chai as an engine then please use what I wroked hard to make.</p>
+<p>Some components are necessary for almost every Entity, some are required for accessing some functionalities in Chai.</p>
+<p><em><strong>It's important to note that all Chai authored Componenets follow the naming convention of suffixing the Component's name with the word "Component", except for VisualTransform.</strong></em></p>
+<p><em>Moreover all Chai authored Components have builder functions that follow the Convention "New" + Name of Component, With the exception of this rule being the "VisualTransform" Component as well.</em></p>
+<p><strong>Components:</strong></p>
+<ul>
+<li><a href="./Components/visual_transform.html">VisualTransform</a></li>
+<li><a href="./Components/sprite_component.html">SpriteComponent</a></li>
+<li><a href="./Components/quad_component.html">QuadComponent</a></li>
+<li><a href="./Components/line_component.html">LineComponent</a></li>
+<li><a href="./Components/font_render_component.html">FontRender</a></li>
+<li><a href="./Components/sprite_animation_component.html">SpriteAnimationComponent</a></li>
+<li><a href="./Components/animation_component.html">AnimationComponent</a></li>
+<li><a href="./Components/dynamic_body_component.html">DynamicBodyComponent</a></li>
+<li><a href="./Components/static_body_component.html">StaticBodyComponent</a></li>
+<li><a href="./Components/kinematic_body_component.html">KinematicBodyComponent</a></li>
+<li><a href="./Components/audio_source_component.html">AudioSourceComponent</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="visualtransform"><a class="header" href="#visualtransform">VisualTransform</a></h1>
+<pre><code class="language-go">type VisualTransform struct {
+	Position   Vector2f
+	Z          float32
+	Dimensions Vector2f
+	Rotation   float32
+	Scale      float32
+	Tint       RGBA8
+	UV1        Vector2f
+	UV2        Vector2f
+}
+</code></pre>
+<p>This is the most used and fundamental Component offered by Chai, It offers information regarding everything that has to do with the Entity's visual representation.</p>
+<p><strong>Position:</strong> The Entity's location. It takes a Vector2f (Refer to <a href="Components/../DataTypes/vector2f.html">Vector2f</a>).</p>
+<p><strong>Z:</strong> The Entity's distance from the Camera, It can range (0.0 -&gt; 1000.0). It also represents the Entity's drawing order, The higher it is the further it is from the camera, the lower its drawing order is.</p>
+<p><strong>Dimensions:</strong> The Entity's Dimensions. It takes a Vector2f.</p>
+<p><strong>Rotation:</strong> The Entity's Rotation.</p>
+<p><strong>Scale:</strong> The Entity's Scale, Which is multiplied by the Dimensions to give the final Entity size.</p>
+<p><strong>Tint:</strong> The Entity's tint (color or modulance), It takes an RGBA8.</p>
+<p><strong>UV1:</strong> The Entity's starting Texture Coordinates. It takes a Vector2f.</p>
+<p><strong>UV2:</strong> The Entity's ending Texture Coordinates. It takes a Vector2f.</p>
+<hr />
+<h3 id="creating-a-visualtransform-component"><a class="header" href="#creating-a-visualtransform-component"><strong>Creating a VisualTransform Component</strong></a></h3>
+<pre><code class="language-go">func SceneStartSystem(_this_scene *chai.Scene) {    
+    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(0.0, 0.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt))
+    
+    _vt_comp, _ := chai.GetComponent[chai.VisualTransform](_this_scene, _entity)
+    
+    chai.LogF("[Entity VisualTransform]: %v", _vt_comp)
+
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(SceneStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="spritecomponent"><a class="header" href="#spritecomponent">SpriteComponent</a></h1>
+<pre><code class="language-go">type SpriteComponent struct {
+	Texture Texture2D
+}
+</code></pre>
+<p>This Component is referred to as a Mark Component, for it only marks the Entity for functionality and does not contriubte to the Rendering of the Sprite itself.</p>
+<p><em>What do we mean?</em></p>
+<pre><code class="language-go">_entity := _this_scene.NewEntityId()
+_vt := chai.VisualTransform{
+    Position: chai.NewVector2f(0.0, 0.0),
+    Z: 0.0,
+    Dimensions: chai.NewVector2f(100.0, 100.0),
+    Rotation: 0.0,
+    Scale: 1.0,
+    UV1: chai.Vector2fZero,
+    UV2: chai.Vector2fOne,
+}
+_sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, ..., false)
+
+_this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
+</code></pre>
+<p><em>This code will not run</em></p>
+<p>The previous script creates an Entity with a VisualTransform and then using the Entity and the VisualTransform, it creates a SpriteComponent with the method "NewSpriteComponent".
+Using this we tell Chai that we want a Sprite to be drawn with relation to this Entity and VisualTransform, Using this we can manipulate the VisualTransform of the Entity and it will Update dynamically without the need of Adding any System by default.</p>
+<p><strong>The method NewSpriteComponent() takes a pointer to the current Scene, the Entity to be paired to, the Visual Transform of that Entity, A pointer to a Texture type (...), and a boolean to see if it's this Entity is to be drawn Static or Not.</strong></p>
+<p><em>Static means that in no way during the lifetime of the App you would change the values of the VisualTransform. It's useful for drawing Levels and Backgrounds.</em></p>
+<p><strong>Now what do we need a SpriteComponent for if the drawing of the Sprite is being done without the use of the System part of Chai?</strong></p>
+<p>It's quite useful when Iterating over Entities being drawn. Using it as a Mark Component, the Entity will be marked as having a Sprite attached to it and as such you can Iterate over it.</p>
+<pre><code class="language-go">for (i:=0;i&lt;10;i++) {
+    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, ..., false)
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
+}
+
+chai.Iterate1[chai.SpriteComponent](func(i ecs.Id, sc *chai.SpriteComponent) {
+    // Do Something With the Entity
+})
+</code></pre>
+<p><em>This code will not run</em></p>
+<h2 id="drawing-a-sprite"><a class="header" href="#drawing-a-sprite">Drawing a Sprite</a></h2>
+<p>To draw a Sprite, You need a Sprite(Image). Loading an Image is Chai is very easy, Using the method "LoadPng" you can load an Image and return the Texture containing its Width, Height.</p>
+<p><strong>How can I load a Texture?</strong> refer to <a href="Components/../Resources/texture.html">Texture Resource</a></p>
+<p>After learning about Textures in Chai, Let's draw a Sprite:</p>
+<pre><code class="language-go">func SceneStartSystem(_this_scene *chai.Scene) {
+    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint, chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    _texture := chai.LoadPng("chai_logo.png")
+    _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, &amp;_texture, false)
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(SceneStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<p><img src="Components/../../resources/load_png.png" alt="Draw Sprite Output" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vector2f"><a class="header" href="#vector2f">Vector2f</a></h1>
+<pre><code class="language-go">type Vector2f struct {
+	X float32
+	Y float32
+}
+</code></pre>
+<p><strong>Vector2f</strong> is used everywhere, It represents a Point in a 2D Coordinates system.</p>
+<h3 id="creating-a-new-vector2f"><a class="header" href="#creating-a-new-vector2f"><strong>Creating a new Vector2f</strong></a></h3>
+<pre><code class="language-go">_vec1 := chai.Vector2f{X:5.0, Y:1.0}
+_vec2 := chai.NewVector2f(4.0, 1.0)
+</code></pre>
+<h3 id="operations-done-on-vector2f"><a class="header" href="#operations-done-on-vector2f"><strong>Operations Done On Vector2f</strong></a></h3>
+<pre><code class="language-go">_vec1.Equal(_vec2) // returs a boolean, Check if 2 Vector2f are equal.
+
+_vec1.NearlyEqual(_vec2) // returns a boolean, Check if 2 Vector2f are nearly equal (by margin of 0.001)
+
+_vec1.Add(_vec2) // returns a Vector2f, Returns the added value of 2 Vector2f.
+
+_vec1.AddXY(_vec2.X, _vec2.Y) // returns a Vector2f, Returns the added value of a Vector2f and 2 floats.
+
+_vec1.Subtract(_vec2) // returns a Vector2f, Returns the subtracted value of 2 Vector2f.
+
+_vec1.SubtractXY(_vect) // returns a Vector2f, Returns the subtracted value of 1 Vector2f and 2 floats.
+
+_vec1.Multp(_vec2) // returns a Vector2f, Returns the multiplied value of 2 Vector2f.
+
+_vec1.MultpXY(_vec2) // returns a Vector2f, Returns the multiplied value of 1 Vector2f and 2 floats.
+
+_vec1.Div(_vec2) // returns a Vector2f, Returns the divided value of 2 Vector2f.
+
+_vec1.Scale(2.0) // returns a Vector2f, Returns the scaled value of a Vector2f and a float (_vec1 * 2.0)
+
+AbsVector2f(_vec1) // returns a Vector2f, Returns a absolute value of a Vector2f.
+
+_vec1.Length() // returns a float, Returns the length of a Vector2f.
+
+_vec1.LengthSquared() // returns a float, Returns the squared length of a Vector2f.
+
+_vec1.Normalize() // returns a Vector2f, Returns a normalized value of a Vector2f.
+
+_vec1.Distance(_vec2) // returns a float, Returns the distance between 2 Vector2f.
+
+DotProduct(_vec1, _vec2) // returns a float32, Returns the Dot Product of 2 Vector2f.
+
+_vec1.Perpendicular() // returns a Vector2f, Returns the Vector2f Perpendicular of the Vector2f provided.
+
+_vec1.Angle() // returns a float, Returns the angle of a Vector2f in Radians.
+
+_vec1.Rotate(90.0, _vec2) // returns a Vector2f, Returns the Rotated value of a Vector2f with a pivot from the Center (use a Zero Vector2f if you want it to rotate from the Center)
+
+_vec1.RotateCenter(90.0) // returns a Vector2f, Returns the Rotated value of a Vector2f.
+
+Vector2fMidpoint(_vec1, _vec2) // returns a Vector2f, Returns the Middle point between 2 Vector2f.
+
+_vec1.ToString() // returns a string, Returns the Vector2f in a string format.
+
+RandVector2f() // returns a Vector2f, Returns a Random Vector2f, its X and Y ranging (0.0, 1.0).
+
+RandPosVector2f() // returns a Vector2f, Returns a Random Vector2f, its X and Y ranging (-1.0, 1.0).
+</code></pre>
+<h3 id="vector2f-usage"><a class="header" href="#vector2f-usage"><strong>Vector2f Usage</strong></a></h3>
+<pre><code class="language-go">_new_vec := _vec1.Add(_vec2).Scale(3.0).Rotate(45.0, chai.Vector2f(0.0, 0.0)).Normalize()
+chai.LogF("New Vec: "+ _new_vec.ToString())
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rgba8"><a class="header" href="#rgba8">RGBA8</a></h1>
+<pre><code class="language-go">type RGBA8 struct {
+	r, g, b, a uint8
+}
+</code></pre>
+<p>Represents the Color data type in Chai, It uses unsigned integers (8-bit) to represent the default (RGBA) values used by most Color Wheels (Red, Green, Blue, and Alpha ranging from 0 to 255).</p>
+<h3 id="creating-a-new-rgba8"><a class="header" href="#creating-a-new-rgba8"><strong>Creating a new RGBA8</strong></a></h3>
+<pre><code class="language-go">_color1 := chai.RGBA8{255, 255, 255, 255}
+_color2 := chai.NewRGBA8(255, 255, 255, 255)
+_color3 := chai.NewRGBA8Float(1.0, 1.0, 1.0, 1.0)
+</code></pre>
+<h3 id="how-to-manipulate-an-rgba8"><a class="header" href="#how-to-manipulate-an-rgba8"><strong>How to Manipulate an RGBA8?</strong></a></h3>
+<pre><code class="language-go">_color1.SetColorR(100)
+_color1.SetColorBFloat32(0.35)
+_color1.SetColorA(0.0)
+_color1.SetColorAFloat32(1.0)
+
+
+chai.LogF("Color: %v", _color1)
+</code></pre>
+<h3 id="rgba8-methods"><a class="header" href="#rgba8-methods"><strong>RGBA8 Methods</strong></a></h3>
+<pre><code class="language-go">chai.LogF("[Color]: %v", chai.GetRandomRGBA8()) // Returns a Random Color.
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="texture"><a class="header" href="#texture">Texture</a></h1>
+<pre><code class="language-go">type Texture2D struct {
+	Width, Height int
+	textureId js.Value
+	spwidth, spheight  int
+}
+</code></pre>
+<p><strong>Width:</strong> Loaded image width</p>
+<p><strong>Height:</strong> Loaded image height</p>
+<p><strong>textureId:</strong> private variable referring to the Texture Id</p>
+<p><strong>spwidth:</strong> private variable referring to the Single Sprite Width, useful when loading a SpriteSheet.</p>
+<p><strong>spheight:</strong> private variable referring to the Single Sprite Height, useful when loading a SpriteSheet.</p>
+<hr />
+<h3 id="how-can-we-create-a-texture"><a class="header" href="#how-can-we-create-a-texture"><strong>How can we create a Texture?</strong></a></h3>
+<pre><code class="language-go">func LoadPng(_file_path string, _texture_settings TextureSettings) Texture2D
+</code></pre>
+<p><strong>_file_path:</strong> Local path of the output files (index.html) to the png image file.
+<strong>Important to note that the path must not begin with a forward slash '/'.</strong></p>
+<p><strong>_texture_settings:</strong> Configured settings of loading the png</p>
+<pre><code class="language-go">type TextureSettings struct {
+	Filter TextureFilter
+}
+</code></pre>
+<p>There is only one settings currently, A filter.</p>
+<p>Filters:</p>
+<ul>
+<li><strong>TEXTURE_FILTER_LINEAR</strong> for smoothing the colors (Useful for high-res art).</li>
+<li><strong>TEXTURE_FILTER_NEAREST</strong> for displaying the pixels directly (Useful for pixel art).</li>
+</ul>
 
                     </main>
 
