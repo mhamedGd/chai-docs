@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Application - Chai Documentation</title>
+        <title>Input - Chai Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html" class="active"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="input.html"><strong aria-hidden="true">3.</strong> Input</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">4.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">4.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">5.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">5.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">5.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">5.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">5.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">6.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Components/visual_transform.html"><strong aria-hidden="true">6.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="Components/sprite_component.html"><strong aria-hidden="true">6.2.</strong> SpriteComponent</a></li><li class="chapter-item expanded "><a href="Components/dynamic_body_component.html"><strong aria-hidden="true">6.3.</strong> DynamicBodyComponent</a></li><li class="chapter-item expanded "><a href="Components/static_body_component.html"><strong aria-hidden="true">6.4.</strong> StaticBodyComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Custom Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="CustomTypes/vector2f.html"><strong aria-hidden="true">7.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="CustomTypes/rgba8.html"><strong aria-hidden="true">7.2.</strong> RGBA8</a></li><li class="chapter-item expanded "><a href="CustomTypes/chai_event.html"><strong aria-hidden="true">7.3.</strong> ChaiEvent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Resources/texture.html"><strong aria-hidden="true">8.1.</strong> Texture</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="input.html" class="active"><strong aria-hidden="true">3.</strong> Input</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">4.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">4.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">5.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">5.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">5.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">5.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">5.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">6.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Components/visual_transform.html"><strong aria-hidden="true">6.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="Components/sprite_component.html"><strong aria-hidden="true">6.2.</strong> SpriteComponent</a></li><li class="chapter-item expanded "><a href="Components/dynamic_body_component.html"><strong aria-hidden="true">6.3.</strong> DynamicBodyComponent</a></li><li class="chapter-item expanded "><a href="Components/static_body_component.html"><strong aria-hidden="true">6.4.</strong> StaticBodyComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Custom Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="CustomTypes/vector2f.html"><strong aria-hidden="true">7.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="CustomTypes/rgba8.html"><strong aria-hidden="true">7.2.</strong> RGBA8</a></li><li class="chapter-item expanded "><a href="CustomTypes/chai_event.html"><strong aria-hidden="true">7.3.</strong> ChaiEvent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Resources/texture.html"><strong aria-hidden="true">8.1.</strong> Texture</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,44 +173,113 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="application"><a class="header" href="#application">Application</a></h1>
-<pre><code class="language-go">type App struct {
-	Width    int
-	Height   int
-	Title    string
-	OnStart  func()
-	OnUpdate func(float32)
-	OnDraw   func(float32)
-	OnEvent  func(*AppEvent)
-}
+                        <h1 id="input"><a class="header" href="#input">Input</a></h1>
+<p>The Input System in Chai is very rudimentary and very simple. All you can do for now is bind keyboard inputs to specific name-tags, and check for their pressing behaviour. Additionally, you can check mouse and touch events.</p>
+<pre><code class="language-go">func BindInput(_input_name string, _corr_key KeyCode)
+
+// Usage
+chai.BindInput("Jump", chai.KEY_SPACE)
 </code></pre>
-<p>An application is Chai's main entry point. It contains your App's info and life cycle.
-It can be declared as a variable of type App.</p>
-<pre><code class="language-go">var app chai.App = chai.App {
+<p><strong>_input_name:</strong> This input's name-tag.</p>
+<p><strong>_corr_key:</strong> The corresponding keycode for this input.</p>
+<pre><code class="language-go">package main
+
+import (
+	chai "github.com/mhamedGd/chai"
+)
+
+var app chai.App = chai.App {
     Title: "",
     Width: 1920,
     Height: 1080,
-    OnStart: func(){},
-    OnUpdate: func(_delta_time float32){},
+    OnStart: func(){
+        chai.BindInput("Jump", chai.KEY_SPACE)
+    },
+    OnUpdate: func(_delta_time float32){
+        if (chai.IsJustPressed("Jump")) {
+            // Prints a Message to the Console
+            // To see the console, in the browser press (CTRL/CMD + L Shift + C)
+            chai.LogF("Just Pressed Jump!")
+        }
+    },
     OnDraw: func(_delta_time float32){},
     OnEvent: func(_event *chai.AppEvent){},
 }
-</code></pre>
-<p>In order to run the Application, All You have to do is call "chai.Run(<em>application_variable_pointer</em>)" in the main file of your go project.</p>
-<pre><code class="language-go">func main() {
+
+func main() {
     chai.Run(&amp;app)
 }
 </code></pre>
+<h3 id="input-methods"><a class="header" href="#input-methods"><strong>Input Methods</strong></a></h3>
+<pre><code class="language-go">func ChangeInputBinding(_input_name string, _new_binding KeyCode)
+</code></pre>
+<p><strong>_input_name:</strong> This input's name-tag.</p>
+<p><strong>_new_binding:</strong> The corresponding new keycode for this input.</p>
+<p><em>Changes the Keycode of an already bound Input.</em></p>
+<br>
+<pre><code class="language-go">func GetActionStrength(_input_name string) float32
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns 1.0 of Input is pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsPressed(_input_name string) bool
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns true if Input is pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsJustPressed(_input_name string) bool
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns true if Input was just pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsJustReleased(_input_name string) bool
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns true if Input was just released.</em></p>
+<br>
+<pre><code class="language-go">func IsMousePressed(_mouse_button MouseButton) bool
+</code></pre>
+<p><strong>_mouse_button:</strong> Current Mouse Button being pressed</p>
+<ul>
+<li>chai.LEFT_MOUSE_BUTTON</li>
+<li>chai.MIDLE_MOUSE_BUTTON</li>
+<li>chai.RIGHT_MOUSE_BUTTON</li>
+</ul>
+<p><em>Returns true if mouse button is pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsMouseJustPressed() bool
+</code></pre>
+<p><em>Returns true if a mouse button was just pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsMouseJustReleased() bool
+</code></pre>
+<p><em>Returns true if a mouse button was just pressed.</em></p>
+<br>
+<pre><code class="language-go">func GetNumberOfFingersTouching() uint8
+</code></pre>
+<p><em>Returns the current number of fingers touching.</em></p>
+<br>
+<pre><code class="language-go">func AreFingersTouching(_num_of_fingers uint8) bool
+</code></pre>
+<p><em>Returns true if the number provided is equal to the number of fingers touching.</em></p>
+<br>
+<pre><code class="language-go">func IsJustTouched(_num_of_fingers uint8) bool
+</code></pre>
+<p><em>Returns true is this number of fingers has just touched the screen.</em></p>
+<br>
+<pre><code class="language-go">func IsJustTouchReleased(_num_of_fingers uint8) bool
+</code></pre>
+<p><em>Returns true is this number of fingers were just touching the screen before the user took a finger off of it.</em></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="application.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="input.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="scene.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -220,11 +289,11 @@ It can be declared as a variable of type App.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="application.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="input.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="scene.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

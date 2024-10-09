@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>SpriteComponent - Chai Documentation</title>
+        <title>StaticBodyComponent - Chai Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">3.</strong> Input</a></li><li class="chapter-item expanded "><a href="../scene.html"><strong aria-hidden="true">4.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scene_runtime.html"><strong aria-hidden="true">4.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="../ecs.html"><strong aria-hidden="true">5.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ECS/entity.html"><strong aria-hidden="true">5.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="../ECS/component.html"><strong aria-hidden="true">5.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="../ECS/system.html"><strong aria-hidden="true">5.3.</strong> System</a></li><li class="chapter-item expanded "><a href="../ECS/iterators.html"><strong aria-hidden="true">5.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="../chai_components.html"><strong aria-hidden="true">6.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Components/visual_transform.html"><strong aria-hidden="true">6.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="../Components/sprite_component.html" class="active"><strong aria-hidden="true">6.2.</strong> SpriteComponent</a></li><li class="chapter-item expanded "><a href="../Components/dynamic_body_component.html"><strong aria-hidden="true">6.3.</strong> DynamicBodyComponent</a></li><li class="chapter-item expanded "><a href="../Components/static_body_component.html"><strong aria-hidden="true">6.4.</strong> StaticBodyComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Custom Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../CustomTypes/vector2f.html"><strong aria-hidden="true">7.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="../CustomTypes/rgba8.html"><strong aria-hidden="true">7.2.</strong> RGBA8</a></li><li class="chapter-item expanded "><a href="../CustomTypes/chai_event.html"><strong aria-hidden="true">7.3.</strong> ChaiEvent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Resources/texture.html"><strong aria-hidden="true">8.1.</strong> Texture</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">3.</strong> Input</a></li><li class="chapter-item expanded "><a href="../scene.html"><strong aria-hidden="true">4.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scene_runtime.html"><strong aria-hidden="true">4.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="../ecs.html"><strong aria-hidden="true">5.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ECS/entity.html"><strong aria-hidden="true">5.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="../ECS/component.html"><strong aria-hidden="true">5.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="../ECS/system.html"><strong aria-hidden="true">5.3.</strong> System</a></li><li class="chapter-item expanded "><a href="../ECS/iterators.html"><strong aria-hidden="true">5.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="../chai_components.html"><strong aria-hidden="true">6.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Components/visual_transform.html"><strong aria-hidden="true">6.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="../Components/sprite_component.html"><strong aria-hidden="true">6.2.</strong> SpriteComponent</a></li><li class="chapter-item expanded "><a href="../Components/dynamic_body_component.html"><strong aria-hidden="true">6.3.</strong> DynamicBodyComponent</a></li><li class="chapter-item expanded "><a href="../Components/static_body_component.html" class="active"><strong aria-hidden="true">6.4.</strong> StaticBodyComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Custom Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../CustomTypes/vector2f.html"><strong aria-hidden="true">7.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="../CustomTypes/rgba8.html"><strong aria-hidden="true">7.2.</strong> RGBA8</a></li><li class="chapter-item expanded "><a href="../CustomTypes/chai_event.html"><strong aria-hidden="true">7.3.</strong> ChaiEvent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Resources/texture.html"><strong aria-hidden="true">8.1.</strong> Texture</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,62 +173,76 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="spritecomponent"><a class="header" href="#spritecomponent">SpriteComponent</a></h1>
-<pre><code class="language-go">type SpriteComponent struct {
-	Texture Texture2D
+                        <h1 id="staticbodycomponent"><a class="header" href="#staticbodycomponent">StaticBodyComponent</a></h1>
+<pre><code class="language-go">type StaticBodyComponent struct {
+	b2Body           *box2d.B2Body
+	OwnerEntId       EntId
+	OnCollisionBegin ChaiEvent1[CollisionBox2D]
+	OnCollisionEnd   ChaiEvent1[CollisionBox2D]
+	settings         StaticBodySettings
 }
 </code></pre>
-<p>This Component is referred to as a Mark Component, for it only marks the Entity for functionality and does not contriubte to the Rendering of the Sprite itself.</p>
-<p><em>What do we mean?</em></p>
-<pre><code class="language-go">_entity := _this_scene.NewEntityId()
-_vt := chai.VisualTransform{
-    Position: chai.NewVector2f(0.0, 0.0),
-    Z: 0.0,
-    Dimensions: chai.NewVector2f(100.0, 100.0),
-    Rotation: 0.0,
-    Scale: 1.0,
-    UV1: chai.Vector2fZero,
-    UV2: chai.Vector2fOne,
-}
-_sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, ..., false)
-
-_this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
-</code></pre>
-<p><em>This code will not run</em></p>
-<p>The previous script creates an Entity with a VisualTransform and then using the Entity and the VisualTransform, it creates a SpriteComponent with the method "NewSpriteComponent".
-Using this we tell Chai that we want a Sprite to be drawn with relation to this Entity and VisualTransform, Using this we can manipulate the VisualTransform of the Entity and it will Update dynamically without the need of Adding any System by default.</p>
-<p><strong>The method NewSpriteComponent() takes a pointer to the current Scene, the Entity to be paired to, the Visual Transform of that Entity, A pointer to a Texture type (...), and a boolean to see if it's this Entity is to be drawn Static or Not.</strong></p>
-<p><em>Static means that in no way during the lifetime of the App you would change the values of the VisualTransform. It's useful for drawing Levels and Backgrounds.</em></p>
-<p><strong>Now what do we need a SpriteComponent for if the drawing of the Sprite is being done without the use of the System part of Chai?</strong></p>
-<p>It's quite useful when Iterating over Entities being drawn. Using it as a Mark Component, the Entity will be marked as having a Sprite attached to it and as such you can Iterate over it.</p>
-<pre><code class="language-go">for (i:=0;i&lt;10;i++) {
-    _entity := _this_scene.NewEntityId()
+<p>A Static Body is a Physics Body that does not get affected by physical forces at all, And it is by itself an effector.</p>
+<p>StaticBodyComponent is a Component that adds Physical properties to an Entity. It basically registers this Entity as part of the Physics Engine. Using this Component you can create boundaries(walls), that prevent DynamicBodies from passing through them.</p>
+<p><strong>b2Body:</strong> Private variable referring to the pointer of the body in the physics Engine. Unless you're contributing to Chai, this should be of no concern to you.</p>
+<p><strong>OwnerEntId:</strong> The owner of this dynamic body (EntId is just a wrapper around ecs.Id).</p>
+<p><strong>OnCollisionBegin:</strong> A ChaiEvent that gets triggered whenever a collision happens on this body (See <a href="../CustomTypes/chai_event.html">ChaiEvent</a>).</p>
+<p><strong>OnCollisionEnd:</strong> A ChaiEvent that gets triggered whenever a collision ends on this body.</p>
+<p><strong>settings:</strong> Settings concerning this dynamic body (mass, elasticity, locked rotation, etc...)</p>
+<h3 id="create-a-staticbodycomponent"><a class="header" href="#create-a-staticbodycomponent"><strong>Create a StaticBodyComponent</strong></a></h3>
+<p>Just like previously mentioned, Components authored by Chai follow the convention of custom Components creation methods structured (New + ComponentName).</p>
+<pre><code class="language-go">    _entity := _this_scene.NewEntityId()
     _vt := chai.VisualTransform{
         Position: chai.NewVector2f(0.0, 0.0),
         Z: 0.0,
         Dimensions: chai.NewVector2f(100.0, 100.0),
         Rotation: 0.0,
         Scale: 1.0,
+        Tint: chai.WHITE,
         UV1: chai.Vector2fZero,
         UV2: chai.Vector2fOne,
     }
-    _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, ..., false)
     
-    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
-}
+    _sb_settings := chai.StaticBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _vt.Dimensions,
+        StartRotation: _vt.Rotation,
+        Friction: 0.3, Elasticity: 0.25,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
 
-chai.Iterate1[chai.SpriteComponent](func(i ecs.Id, sc *chai.SpriteComponent) {
-    // Do Something With the Entity
-})
+    _sb_component := chai.NewStaticBody(_entity, _vt, &amp;_sb_settings)
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sb_component))
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
 </code></pre>
-<p><em>This code will not run</em></p>
-<h2 id="drawing-a-sprite"><a class="header" href="#drawing-a-sprite">Drawing a Sprite</a></h2>
-<p>To draw a Sprite, You need a Sprite(Image). Loading an Image is Chai is very easy, Using the method "LoadPng" you can load an Image and return the Texture containing its Width, Height.</p>
-<p><strong>How can I load a Texture?</strong> refer to <a href="../Resources/texture.html">Texture Resource</a></p>
-<p>After learning about Textures in Chai, Let's draw a Sprite:</p>
+<h4 id="lets-discuss-staticbodysettings"><a class="header" href="#lets-discuss-staticbodysettings"><strong>Let's discuss "StaticBodySettings"</strong></a></h4>
+<pre><code class="language-go">type StaticBodySettings struct {
+	IsTrigger            bool
+	ColliderShape        int
+	Offset               Vector2f
+	StartDimensions      Vector2f
+	StartRotation        float32
+	Friction, Elasticity float32
+	PhysicsLayer         uint16
+}
+</code></pre>
+<p><strong>IsTrigger:</strong> Whether the body is trigger (passsable) or not</p>
+<p><strong>ColliderShape:</strong> There are 2 shapes currently (SHAPE_RECTBODY, SHAPE_CIRCLEBODY)</p>
+<p><strong>Offset:</strong> A position offset that can be modified in runtime</p>
+<p><strong>StartDimensions:</strong> The body's starting dimensions</p>
+<p><strong>StartRotation:</strong> The body's starting rotation</p>
+<p><strong>Friction:</strong> The body's friction with other body's</p>
+<p><strong>Elasticity:</strong> The body's bounciness</p>
+<p><strong>PhysicsLayer:</strong> The body's interaction physical layer</p>
+<hr />
+<h3 id="usage-example"><a class="header" href="#usage-example"><strong>Usage Example</strong></a></h3>
 <pre><code class="language-go">func SceneStartSystem(_this_scene *chai.Scene) {
-    _entity := _this_scene.NewEntityId()
-    _vt := chai.VisualTransform{
+    _db_entity := _this_scene.NewEntityId()
+    _db_vt := chai.VisualTransform{
         Position: chai.NewVector2f(0.0, 0.0),
         Z: 0.0,
         Dimensions: chai.NewVector2f(100.0, 100.0),
@@ -241,9 +255,52 @@ chai.Iterate1[chai.SpriteComponent](func(i ecs.Id, sc *chai.SpriteComponent) {
     _texture := chai.LoadPng("chai_logo.png", &amp;chai.TextureSettings{
         Filter: chai.TEXTURE_FILTER_LINEAR,
     })
-    _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, &amp;_texture, false)
+    _db_sprite_component := chai.NewSpriteComponent(_this_scene, _db_entity, _db_vt, &amp;_texture, false)
+
+    _db_settings := chai.DynamicBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        StartPosition: _db_vt.Position,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _db_vt.Dimensions,
+        StartRotation: _db_vt.Rotation,
+        Mass: 20, Friction: 0.3, Elasticity: 0.25,
+        ConstrainRotation: false,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+    _db_component := chai.NewDynamicBodyComponent(_db_entity, _db_vt, &amp;_db_settings)
+
+    _this_scene.AddComponents(_db_entity, chai.ToComponent(_db_vt), chai.ToComponent(_db_sprite_component), chai.ToComponent(_db_component))
     
-    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
+    _sb_entity := _this_scene.NewEntityId()
+    _sb_vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, -200.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(400.0, 50.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    
+    _sb_settings := chai.StaticBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _sb_vt.Dimensions,
+        StartRotation: _sb_vt.Rotation,
+        Friction: 0.3, Elasticity: 0.25,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+
+    _sb_component := chai.NewStaticBodyComponent(_sb_entity, _sb_vt, &amp;_sb_settings)
+    
+    _this_scene.AddComponents(_sb_entity, chai.ToComponent(_sb_vt), chai.ToComponent(_sb_component))
+
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+    _this_scene.NewUpdateSystem(chai.DebugBodyDrawSystem)
 }
 
 var app chai.App = chai.App{
@@ -263,17 +320,17 @@ func main(){
 	chai.Run(&amp;app)
 }
 </code></pre>
-<p><img src="../../resources/load_png.png" alt="Draw Sprite Output" /></p>
+<p><img src="../../resources/static_example.gif" alt="StaticBody Example Output" /></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../Components/visual_transform.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../Components/dynamic_body_component.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../Components/dynamic_body_component.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../CustomTypes/vector2f.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -283,11 +340,11 @@ func main(){
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../Components/visual_transform.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../Components/dynamic_body_component.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../Components/dynamic_body_component.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../CustomTypes/vector2f.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

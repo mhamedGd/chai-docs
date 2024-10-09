@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>DynamicBodyComponent - Chai Documentation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="../input.html"><strong aria-hidden="true">3.</strong> Input</a></li><li class="chapter-item expanded "><a href="../scene.html"><strong aria-hidden="true">4.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../scene_runtime.html"><strong aria-hidden="true">4.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="../ecs.html"><strong aria-hidden="true">5.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ECS/entity.html"><strong aria-hidden="true">5.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="../ECS/component.html"><strong aria-hidden="true">5.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="../ECS/system.html"><strong aria-hidden="true">5.3.</strong> System</a></li><li class="chapter-item expanded "><a href="../ECS/iterators.html"><strong aria-hidden="true">5.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="../chai_components.html"><strong aria-hidden="true">6.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Components/visual_transform.html"><strong aria-hidden="true">6.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="../Components/sprite_component.html"><strong aria-hidden="true">6.2.</strong> SpriteComponent</a></li><li class="chapter-item expanded "><a href="../Components/dynamic_body_component.html" class="active"><strong aria-hidden="true">6.3.</strong> DynamicBodyComponent</a></li><li class="chapter-item expanded "><a href="../Components/static_body_component.html"><strong aria-hidden="true">6.4.</strong> StaticBodyComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Custom Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../CustomTypes/vector2f.html"><strong aria-hidden="true">7.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="../CustomTypes/rgba8.html"><strong aria-hidden="true">7.2.</strong> RGBA8</a></li><li class="chapter-item expanded "><a href="../CustomTypes/chai_event.html"><strong aria-hidden="true">7.3.</strong> ChaiEvent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Resources/texture.html"><strong aria-hidden="true">8.1.</strong> Texture</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Chai Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="dynamicbodycomponent"><a class="header" href="#dynamicbodycomponent">DynamicBodyComponent</a></h1>
+<pre><code class="language-go">type DynamicBodyComponent struct {
+	b2Body           *box2d.B2Body
+	OwnerEntId       EntId
+	OnCollisionBegin ChaiEvent1[CollisionBox2D]
+	OnCollisionEnd   ChaiEvent1[CollisionBox2D]
+	settings         DynamicBodySettings
+}
+</code></pre>
+<p>A Dynamic Body is a Physics Body that gets affected by forces (including gravity) and affects other Dynamic Bodies.</p>
+<p>DynamicBodyComponent is a Component that adds Physical properties to an Entity. It basically registers this Entity as part of the Physics Engine. Using this Component you can achieve smooth character movement behaviour.</p>
+<p><strong>b2Body:</strong> Private variable referring to the pointer of the body in the physics Engine. Unless you're contributing to Chai, this should be of no concern to you.</p>
+<p><strong>OwnerEntId:</strong> The owner of this dynamic body (EntId is just a wrapper around ecs.Id).</p>
+<p><strong>OnCollisionBegin:</strong> A ChaiEvent that gets triggered whenever a collision happens on this body (See <a href="../CustomTypes/chai_event.html">ChaiEvent</a>).</p>
+<p><strong>OnCollisionEnd:</strong> A ChaiEvent that gets triggered whenever a collision ends on this body.</p>
+<p><strong>settings:</strong> Settings concerning this dynamic body (mass, elasticity, locked rotation, etc...)</p>
+<hr />
+<h3 id="create-a-dynamicbodycomponent"><a class="header" href="#create-a-dynamicbodycomponent"><strong>Create a DynamicBodyComponent</strong></a></h3>
+<p>Just like previously mentioned, Components authored by Chai follow the convention of custom Components creation methods structured (New + ComponentName).</p>
+<pre><code class="language-go">    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    
+    _db_settings := chai.DynamicBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        StartPosition: _vt.Position,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _vt.Dimensions,
+        StartRotation: _vt.Rotation,
+        Mass: 20, Friction: 0.3, Elasticity: 0.25,
+        ConstrainRotation: false,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+
+    _db_component := chai.NewDynamicBodyComponent(_entity, _vt, &amp;_db_settings)
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_db_component))
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+</code></pre>
+<h4 id="lets-discuss-dynamicbodysettings"><a class="header" href="#lets-discuss-dynamicbodysettings"><strong>Let's discuss "DynamicBodySettings"</strong></a></h4>
+<pre><code class="language-go">type DynamicBodySettings struct {
+	IsTrigger                  bool
+	ColliderShape              int
+	StartPosition              Vector2f
+	Offset                     Vector2f
+	StartDimensions            Vector2f
+	StartRotation              float32
+	Mass, Friction, Elasticity float32
+	ConstrainRotation          bool
+	PhysicsLayer               uint16
+}
+</code></pre>
+<p><strong>IsTrigger:</strong> Whether the body is trigger (passsable) or not</p>
+<p><strong>ColliderShape:</strong> There are 2 shapes currently (SHAPE_RECTBODY, SHAPE_CIRCLEBODY)</p>
+<p><strong>StartPosition:</strong> The body's starting position</p>
+<p><strong>Offset:</strong> A position offset that can be modified in runtime</p>
+<p><strong>StartDimensions:</strong> The body's starting dimensions</p>
+<p><strong>StartRotation:</strong> The body's starting rotation</p>
+<p><strong>Mass:</strong> The body's mass</p>
+<p><strong>Friction:</strong> The body's friction with other body's</p>
+<p><strong>Elasticity:</strong> The body's bounciness</p>
+<p><strong>ConstrainRotation:</strong> Whether you want the rotation to be locked or free</p>
+<p><strong>PhysicsLayer:</strong> The body's interaction physical layer</p>
+<hr />
+<p><strong>Lastly</strong> We need to add a new Update Runtime system called (DynamicBodySystem), This system updates the coordinates of the Entity's VisualTransform to match the coordinates of the DynamicBody.</p>
+<hr />
+<h3 id="usage-example"><a class="header" href="#usage-example"><strong>Usage Example</strong></a></h3>
+<pre><code class="language-go">func SceneStartSystem(_this_scene *chai.Scene) {
+    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    _texture := chai.LoadPng("chai_logo.png", &amp;chai.TextureSettings{
+        Filter: chai.TEXTURE_FILTER_LINEAR,
+    })
+    _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, &amp;_texture, false)
+
+    _db_settings := chai.DynamicBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        StartPosition: _vt.Position,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _vt.Dimensions,
+        StartRotation: _vt.Rotation,
+        Mass: 20, Friction: 0.3, Elasticity: 0.25,
+        ConstrainRotation: false,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+    _db_component := chai.NewDynamicBodyComponent(_entity, _vt, &amp;_db_settings)
+
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component), chai.ToComponent(_db_component))
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(SceneStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<p><img src="../../resources/dynamic_body.gif" alt="DynamicBody Output" /></p>
+<h3 id="debug-body-transform"><a class="header" href="#debug-body-transform"><strong>Debug Body Transform</strong></a></h3>
+<p><strong>Add a new Update Runtime system to your Scene (DebugBodyDrawSystem)</strong></p>
+<p><img src="../../resources/dynamic_debug.gif" alt="DynamicDebug Output" /></p>
+<hr />
+<br>
+<h3 id="dynamicbodycomponent-methods"><a class="header" href="#dynamicbodycomponent-methods"><strong>DynamicBodyComponent Methods</strong></a></h3>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetPosition() Vector2f
+
+// Usage
+_db_component.GetPosition()
+</code></pre>
+<p><em>Returns the current position of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetPosition(_position Vector2f)
+
+// Usage
+_db_component.SetPosition(chai.NewVector2f(0.0, 0.0))
+</code></pre>
+<p><em>Sets the current position of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetRotation() float32
+
+// Usage
+_db_component.GetRotation()
+</code></pre>
+<p><em>Returns the current rotation in Degrees of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetRotation(_rotation float32)
+
+// Usage
+_db_component.SetRotation(0.0)
+</code></pre>
+<p><em>Sets the current rotation in Degrees of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyForce(_force_amount, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyForce(chai.Vector2fUp.Scale(1000.0), chai.Vector2fZero)
+</code></pre>
+<p><strong>_force_amount:</strong> Force applied with direction.</p>
+<p><strong>_pivot:</strong> Force application offset from the body's center.</p>
+<p><em>Applies force upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyImpulse(_impulse_amount, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyImpulse(chai.Vector2fUp.Scale(1000.0), chai.Vector2fZero)
+</code></pre>
+<p><strong>_force_amount:</strong> Impulse applied with direction.</p>
+<p><strong>_pivot:</strong> Impulse application offset from the body's center.</p>
+<p><em>Applies an impulse upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyAngularForce(_torque float32, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyAngularForce(180.0, chai.Vector2fZero)
+</code></pre>
+<p><strong>_torque:</strong> Torque applied.</p>
+<p><strong>_pivot:</strong> Force application offset from the body's center.</p>
+<p><em>Applies rotaional torque force upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyAngularImpulse(_torque float32, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyAngularImpulse(180.0, chai.Vector2fZero)
+</code></pre>
+<p><strong>_torque:</strong> Torque applied.</p>
+<p><strong>_pivot:</strong> Impulse application offset from the body's center.</p>
+<p><em>Applies rotaional torque impulse upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetVelocity(_velocity Vector2f)
+
+// Usage
+_db_component.SetVelocity(chai.Vector2fRight)
+</code></pre>
+<p><strong>_velocity:</strong> New body velocity.</p>
+<p><em>Sets the velocity of the body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetVelocity() Vector2f
+
+// Usage
+_db_component.GetVelocity()
+</code></pre>
+<p><em>Gets the velocity of the body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetAngularVelocity(_angular_velocity float32)
+
+// Usage
+_db_component.SetAngularVelocity(15.0)
+</code></pre>
+<p><strong>_angular_velocity:</strong> New body angular velocity.</p>
+<p><em>Sets the angular velocity of the body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetAngularVelocity() float32
+
+// Usage
+_db_component.GetAngularVelocity()
+</code></pre>
+<p><em>Gets the angular velocity of the body</em></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../Components/sprite_component.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../Components/static_body_component.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../Components/sprite_component.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../Components/static_body_component.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

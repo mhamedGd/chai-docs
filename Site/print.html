@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">3.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">3.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">4.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">4.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">4.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">4.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">5.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Components/visual_transform.html"><strong aria-hidden="true">5.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="Components/sprite_component.html"><strong aria-hidden="true">5.2.</strong> SpriteComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Chai Data Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="DataTypes/vector2f.html"><strong aria-hidden="true">6.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="DataTypes/rgba8.html"><strong aria-hidden="true">6.2.</strong> RGBA8</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Resources/texture.html"><strong aria-hidden="true">7.1.</strong> Texture</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="application.html"><strong aria-hidden="true">2.</strong> Application</a></li><li class="chapter-item expanded "><a href="input.html"><strong aria-hidden="true">3.</strong> Input</a></li><li class="chapter-item expanded "><a href="scene.html"><strong aria-hidden="true">4.</strong> Scene</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="scene_runtime.html"><strong aria-hidden="true">4.1.</strong> Runtime</a></li></ol></li><li class="chapter-item expanded "><a href="ecs.html"><strong aria-hidden="true">5.</strong> ECS</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ECS/entity.html"><strong aria-hidden="true">5.1.</strong> Entity</a></li><li class="chapter-item expanded "><a href="ECS/component.html"><strong aria-hidden="true">5.2.</strong> Component</a></li><li class="chapter-item expanded "><a href="ECS/system.html"><strong aria-hidden="true">5.3.</strong> System</a></li><li class="chapter-item expanded "><a href="ECS/iterators.html"><strong aria-hidden="true">5.4.</strong> Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="chai_components.html"><strong aria-hidden="true">6.</strong> Chai Components</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="Components/visual_transform.html"><strong aria-hidden="true">6.1.</strong> VisualTransform</a></li><li class="chapter-item expanded "><a href="Components/sprite_component.html"><strong aria-hidden="true">6.2.</strong> SpriteComponent</a></li><li class="chapter-item expanded "><a href="Components/dynamic_body_component.html"><strong aria-hidden="true">6.3.</strong> DynamicBodyComponent</a></li><li class="chapter-item expanded "><a href="Components/static_body_component.html"><strong aria-hidden="true">6.4.</strong> StaticBodyComponent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Chai Custom Types</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="CustomTypes/vector2f.html"><strong aria-hidden="true">7.1.</strong> Vector2f</a></li><li class="chapter-item expanded "><a href="CustomTypes/rgba8.html"><strong aria-hidden="true">7.2.</strong> RGBA8</a></li><li class="chapter-item expanded "><a href="CustomTypes/chai_event.html"><strong aria-hidden="true">7.3.</strong> ChaiEvent</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Chai Resources</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="Resources/texture.html"><strong aria-hidden="true">8.1.</strong> Texture</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -234,7 +234,7 @@ It can be declared as a variable of type App.</p>
     OnStart: func(){},
     OnUpdate: func(_delta_time float32){},
     OnDraw: func(_delta_time float32){},
-    OnEvent func(_event *AppEvent){},
+    OnEvent: func(_event *chai.AppEvent){},
 }
 </code></pre>
 <p>In order to run the Application, All You have to do is call "chai.Run(<em>application_variable_pointer</em>)" in the main file of your go project.</p>
@@ -242,8 +242,103 @@ It can be declared as a variable of type App.</p>
     chai.Run(&amp;app)
 }
 </code></pre>
-<p>If you try running <strong>make run</strong>, You'll get a looooong stream of errors in the console of the page. If you go all the way to the top you'll eventually see "Scene is set to none".</p>
-<p>So next, we'll be discussing scenes.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="input"><a class="header" href="#input">Input</a></h1>
+<p>The Input System in Chai is very rudimentary and very simple. All you can do for now is bind keyboard inputs to specific name-tags, and check for their pressing behaviour. Additionally, you can check mouse and touch events.</p>
+<pre><code class="language-go">func BindInput(_input_name string, _corr_key KeyCode)
+
+// Usage
+chai.BindInput("Jump", chai.KEY_SPACE)
+</code></pre>
+<p><strong>_input_name:</strong> This input's name-tag.</p>
+<p><strong>_corr_key:</strong> The corresponding keycode for this input.</p>
+<pre><code class="language-go">package main
+
+import (
+	chai "github.com/mhamedGd/chai"
+)
+
+var app chai.App = chai.App {
+    Title: "",
+    Width: 1920,
+    Height: 1080,
+    OnStart: func(){
+        chai.BindInput("Jump", chai.KEY_SPACE)
+    },
+    OnUpdate: func(_delta_time float32){
+        if (chai.IsJustPressed("Jump")) {
+            // Prints a Message to the Console
+            // To see the console, in the browser press (CTRL/CMD + L Shift + C)
+            chai.LogF("Just Pressed Jump!")
+        }
+    },
+    OnDraw: func(_delta_time float32){},
+    OnEvent: func(_event *chai.AppEvent){},
+}
+
+func main() {
+    chai.Run(&amp;app)
+}
+</code></pre>
+<h3 id="input-methods"><a class="header" href="#input-methods"><strong>Input Methods</strong></a></h3>
+<pre><code class="language-go">func ChangeInputBinding(_input_name string, _new_binding KeyCode)
+</code></pre>
+<p><strong>_input_name:</strong> This input's name-tag.</p>
+<p><strong>_new_binding:</strong> The corresponding new keycode for this input.</p>
+<p><em>Changes the Keycode of an already bound Input.</em></p>
+<br>
+<pre><code class="language-go">func GetActionStrength(_input_name string) float32
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns 1.0 of Input is pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsPressed(_input_name string) bool
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns true if Input is pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsJustPressed(_input_name string) bool
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns true if Input was just pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsJustReleased(_input_name string) bool
+</code></pre>
+<p><strong>_input_name:</strong> The name-tag of the Input you're trying to check.</p>
+<p><em>Returns true if Input was just released.</em></p>
+<br>
+<pre><code class="language-go">func IsMousePressed(_mouse_button MouseButton) bool
+</code></pre>
+<p><strong>_mouse_button:</strong> Current Mouse Button being pressed</p>
+<ul>
+<li>chai.LEFT_MOUSE_BUTTON</li>
+<li>chai.MIDLE_MOUSE_BUTTON</li>
+<li>chai.RIGHT_MOUSE_BUTTON</li>
+</ul>
+<p><em>Returns true if mouse button is pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsMouseJustPressed() bool
+</code></pre>
+<p><em>Returns true if a mouse button was just pressed.</em></p>
+<br>
+<pre><code class="language-go">func IsMouseJustReleased() bool
+</code></pre>
+<p><em>Returns true if a mouse button was just pressed.</em></p>
+<br>
+<pre><code class="language-go">func GetNumberOfFingersTouching() uint8
+</code></pre>
+<p><em>Returns the current number of fingers touching.</em></p>
+<br>
+<pre><code class="language-go">func AreFingersTouching(_num_of_fingers uint8) bool
+</code></pre>
+<p><em>Returns true if the number provided is equal to the number of fingers touching.</em></p>
+<br>
+<pre><code class="language-go">func IsJustTouched(_num_of_fingers uint8) bool
+</code></pre>
+<p><em>Returns true is this number of fingers has just touched the screen.</em></p>
+<br>
+<pre><code class="language-go">func IsJustTouchReleased(_num_of_fingers uint8) bool
+</code></pre>
+<p><em>Returns true is this number of fingers were just touching the screen before the user took a finger off of it.</em></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scene"><a class="header" href="#scene">Scene</a></h1>
 <pre><code class="language-go">type Scene struct {
 	Background     RGBA8
@@ -770,7 +865,6 @@ func main(){
 <li><a href="./Components/animation_component.html">AnimationComponent</a></li>
 <li><a href="./Components/dynamic_body_component.html">DynamicBodyComponent</a></li>
 <li><a href="./Components/static_body_component.html">StaticBodyComponent</a></li>
-<li><a href="./Components/kinematic_body_component.html">KinematicBodyComponent</a></li>
 <li><a href="./Components/audio_source_component.html">AudioSourceComponent</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="visualtransform"><a class="header" href="#visualtransform">VisualTransform</a></h1>
@@ -786,12 +880,12 @@ func main(){
 }
 </code></pre>
 <p>This is the most used and fundamental Component offered by Chai, It offers information regarding everything that has to do with the Entity's visual representation.</p>
-<p><strong>Position:</strong> The Entity's location. It takes a Vector2f (Refer to <a href="Components/../DataTypes/vector2f.html">Vector2f</a>).</p>
+<p><strong>Position:</strong> The Entity's location. It takes a Vector2f (Refer to <a href="Components/../CustomTypes/vector2f.html">Vector2f</a>).</p>
 <p><strong>Z:</strong> The Entity's distance from the Camera, It can range (0.0 -&gt; 1000.0). It also represents the Entity's drawing order, The higher it is the further it is from the camera, the lower its drawing order is.</p>
 <p><strong>Dimensions:</strong> The Entity's Dimensions. It takes a Vector2f.</p>
 <p><strong>Rotation:</strong> The Entity's Rotation.</p>
 <p><strong>Scale:</strong> The Entity's Scale, Which is multiplied by the Dimensions to give the final Entity size.</p>
-<p><strong>Tint:</strong> The Entity's tint (color or modulance), It takes an RGBA8.</p>
+<p><strong>Tint:</strong> The Entity's tint (color or modulance), It takes an RGBA8 (Refer to <a href="Components/../CustomTypes/rgba8.html">RGBA8</a>).</p>
 <p><strong>UV1:</strong> The Entity's starting Texture Coordinates. It takes a Vector2f.</p>
 <p><strong>UV2:</strong> The Entity's ending Texture Coordinates. It takes a Vector2f.</p>
 <hr />
@@ -894,11 +988,13 @@ chai.Iterate1[chai.SpriteComponent](func(i ecs.Id, sc *chai.SpriteComponent) {
         Dimensions: chai.NewVector2f(100.0, 100.0),
         Rotation: 0.0,
         Scale: 1.0,
-        Tint, chai.WHITE,
+        Tint: chai.WHITE,
         UV1: chai.Vector2fZero,
         UV2: chai.Vector2fOne,
     }
-    _texture := chai.LoadPng("chai_logo.png")
+    _texture := chai.LoadPng("chai_logo.png", &amp;chai.TextureSettings{
+        Filter: chai.TEXTURE_FILTER_LINEAR,
+    })
     _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, &amp;_texture, false)
     
     _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component))
@@ -922,6 +1018,383 @@ func main(){
 }
 </code></pre>
 <p><img src="Components/../../resources/load_png.png" alt="Draw Sprite Output" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="dynamicbodycomponent"><a class="header" href="#dynamicbodycomponent">DynamicBodyComponent</a></h1>
+<pre><code class="language-go">type DynamicBodyComponent struct {
+	b2Body           *box2d.B2Body
+	OwnerEntId       EntId
+	OnCollisionBegin ChaiEvent1[CollisionBox2D]
+	OnCollisionEnd   ChaiEvent1[CollisionBox2D]
+	settings         DynamicBodySettings
+}
+</code></pre>
+<p>A Dynamic Body is a Physics Body that gets affected by forces (including gravity) and affects other Dynamic Bodies.</p>
+<p>DynamicBodyComponent is a Component that adds Physical properties to an Entity. It basically registers this Entity as part of the Physics Engine. Using this Component you can achieve smooth character movement behaviour.</p>
+<p><strong>b2Body:</strong> Private variable referring to the pointer of the body in the physics Engine. Unless you're contributing to Chai, this should be of no concern to you.</p>
+<p><strong>OwnerEntId:</strong> The owner of this dynamic body (EntId is just a wrapper around ecs.Id).</p>
+<p><strong>OnCollisionBegin:</strong> A ChaiEvent that gets triggered whenever a collision happens on this body (See <a href="Components/../DataTypes/chai_event.html">Chai Event</a>).</p>
+<p><strong>OnCollisionEnd:</strong> A ChaiEvent that gets triggered whenever a collision ends on this body.</p>
+<p><strong>settings:</strong> Settings concerning this dynamic body (mass, elasticity, locked rotation, etc...)</p>
+<hr />
+<h3 id="create-a-dynamicbodycomponent"><a class="header" href="#create-a-dynamicbodycomponent"><strong>Create a DynamicBodyComponent</strong></a></h3>
+<p>Just like previously mentioned, Components authored by Chai follow the convention of custom Components creation methods structured (New + ComponentName).</p>
+<pre><code class="language-go">    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    
+    _db_settings := chai.DynamicBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        StartPosition: _vt.Position,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _vt.Dimensions,
+        StartRotation: _vt.Rotation,
+        Mass: 20, Friction: 0.3, Elasticity: 0.25,
+        ConstrainRotation: false,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+
+    _db_component := chai.NewDynamicBodyComponent(_entity, _vt, &amp;_db_settings)
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_db_component))
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+</code></pre>
+<h4 id="lets-discuss-dynamicbodysettings"><a class="header" href="#lets-discuss-dynamicbodysettings"><strong>Let's discuss "DynamicBodySettings"</strong></a></h4>
+<pre><code class="language-go">type DynamicBodySettings struct {
+	IsTrigger                  bool
+	ColliderShape              int
+	StartPosition              Vector2f
+	Offset                     Vector2f
+	StartDimensions            Vector2f
+	StartRotation              float32
+	Mass, Friction, Elasticity float32
+	ConstrainRotation          bool
+	PhysicsLayer               uint16
+}
+</code></pre>
+<p><strong>IsTrigger:</strong> Whether the body is trigger (passsable) or not</p>
+<p><strong>ColliderShape:</strong> There are 2 shapes currently (SHAPE_RECTBODY, SHAPE_CIRCLEBODY)</p>
+<p><strong>StartPosition:</strong> The body's starting position</p>
+<p><strong>Offset:</strong> A position offset that can be modified in runtime</p>
+<p><strong>StartDimensions:</strong> The body's starting dimensions</p>
+<p><strong>StartRotation:</strong> The body's starting rotation</p>
+<p><strong>Mass:</strong> The body's mass</p>
+<p><strong>Friction:</strong> The body's friction with other body's</p>
+<p><strong>Elasticity:</strong> The body's bounciness</p>
+<p><strong>ConstrainRotation:</strong> Whether you want the rotation to be locked or free</p>
+<p><strong>PhysicsLayer:</strong> The body's interaction physical layer</p>
+<hr />
+<p><strong>Lastly</strong> We need to add a new Update Runtime system called (DynamicBodySystem), This system updates the coordinates of the Entity's VisualTransform to match the coordinates of the DynamicBody.</p>
+<hr />
+<h3 id="usage-example"><a class="header" href="#usage-example"><strong>Usage Example</strong></a></h3>
+<pre><code class="language-go">func SceneStartSystem(_this_scene *chai.Scene) {
+    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    _texture := chai.LoadPng("chai_logo.png", &amp;chai.TextureSettings{
+        Filter: chai.TEXTURE_FILTER_LINEAR,
+    })
+    _sprite_component := chai.NewSpriteComponent(_this_scene, _entity, _vt, &amp;_texture, false)
+
+    _db_settings := chai.DynamicBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        StartPosition: _vt.Position,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _vt.Dimensions,
+        StartRotation: _vt.Rotation,
+        Mass: 20, Friction: 0.3, Elasticity: 0.25,
+        ConstrainRotation: false,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+    _db_component := chai.NewDynamicBodyComponent(_entity, _vt, &amp;_db_settings)
+
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sprite_component), chai.ToComponent(_db_component))
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(SceneStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<p><img src="Components/../../resources/dynamic_body.gif" alt="DynamicBody Output" /></p>
+<h3 id="debug-body-transform"><a class="header" href="#debug-body-transform"><strong>Debug Body Transform</strong></a></h3>
+<p><strong>Add a new Update Runtime system to your Scene (DebugBodyDrawSystem)</strong></p>
+<p><img src="Components/../../resources/dynamic_debug.gif" alt="DynamicDebug Output" /></p>
+<hr />
+<br>
+<h3 id="dynamicbodycomponent-methods"><a class="header" href="#dynamicbodycomponent-methods"><strong>DynamicBodyComponent Methods</strong></a></h3>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetPosition() Vector2f
+
+// Usage
+_db_component.GetPosition()
+</code></pre>
+<p><em>Returns the current position of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetPosition(_position Vector2f)
+
+// Usage
+_db_component.SetPosition(chai.NewVector2f(0.0, 0.0))
+</code></pre>
+<p><em>Sets the current position of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetRotation() float32
+
+// Usage
+_db_component.GetRotation()
+</code></pre>
+<p><em>Returns the current rotation in Degrees of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetRotation(_rotation float32)
+
+// Usage
+_db_component.SetRotation(0.0)
+</code></pre>
+<p><em>Sets the current rotation in Degrees of the Dynamic Body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyForce(_force_amount, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyForce(chai.Vector2fUp.Scale(1000.0), chai.Vector2fZero)
+</code></pre>
+<p><strong>_force_amount:</strong> Force applied with direction.</p>
+<p><strong>_pivot:</strong> Force application offset from the body's center.</p>
+<p><em>Applies force upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyImpulse(_impulse_amount, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyImpulse(chai.Vector2fUp.Scale(1000.0), chai.Vector2fZero)
+</code></pre>
+<p><strong>_force_amount:</strong> Impulse applied with direction.</p>
+<p><strong>_pivot:</strong> Impulse application offset from the body's center.</p>
+<p><em>Applies an impulse upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyAngularForce(_torque float32, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyAngularForce(180.0, chai.Vector2fZero)
+</code></pre>
+<p><strong>_torque:</strong> Torque applied.</p>
+<p><strong>_pivot:</strong> Force application offset from the body's center.</p>
+<p><em>Applies rotaional torque force upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) ApplyAngularImpulse(_torque float32, _pivot Vector2f)
+
+// Usage
+_db_component.ApplyAngularImpulse(180.0, chai.Vector2fZero)
+</code></pre>
+<p><strong>_torque:</strong> Torque applied.</p>
+<p><strong>_pivot:</strong> Impulse application offset from the body's center.</p>
+<p><em>Applies rotaional torque impulse upon the Dynamic Body with an offset from the center</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetVelocity(_velocity Vector2f)
+
+// Usage
+_db_component.SetVelocity(chai.Vector2fRight)
+</code></pre>
+<p><strong>_velocity:</strong> New body velocity.</p>
+<p><em>Sets the velocity of the body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetVelocity() Vector2f
+
+// Usage
+_db_component.GetVelocity()
+</code></pre>
+<p><em>Gets the velocity of the body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) SetAngularVelocity(_angular_velocity float32)
+
+// Usage
+_db_component.SetAngularVelocity(15.0)
+</code></pre>
+<p><strong>_angular_velocity:</strong> New body angular velocity.</p>
+<p><em>Sets the angular velocity of the body</em></p>
+<br>
+<pre><code class="language-go">func (_dc *DynamicBodyComponent) GetAngularVelocity() float32
+
+// Usage
+_db_component.GetAngularVelocity()
+</code></pre>
+<p><em>Gets the angular velocity of the body</em></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="staticbodycomponent"><a class="header" href="#staticbodycomponent">StaticBodyComponent</a></h1>
+<pre><code class="language-go">type StaticBodyComponent struct {
+	b2Body           *box2d.B2Body
+	OwnerEntId       EntId
+	OnCollisionBegin ChaiEvent1[CollisionBox2D]
+	OnCollisionEnd   ChaiEvent1[CollisionBox2D]
+	settings         StaticBodySettings
+}
+</code></pre>
+<p>A Static Body is a Physics Body that does not get affected by physical forces at all, And it is by itself an effector.</p>
+<p>StaticBodyComponent is a Component that adds Physical properties to an Entity. It basically registers this Entity as part of the Physics Engine. Using this Component you can create boundaries(walls), that prevent DynamicBodies from passing through them.</p>
+<p><strong>b2Body:</strong> Private variable referring to the pointer of the body in the physics Engine. Unless you're contributing to Chai, this should be of no concern to you.</p>
+<p><strong>OwnerEntId:</strong> The owner of this dynamic body (EntId is just a wrapper around ecs.Id).</p>
+<p><strong>OnCollisionBegin:</strong> A ChaiEvent that gets triggered whenever a collision happens on this body (See <a href="Components/../DataTypes/chai_event.html">Chai Event</a>).</p>
+<p><strong>OnCollisionEnd:</strong> A ChaiEvent that gets triggered whenever a collision ends on this body.</p>
+<p><strong>settings:</strong> Settings concerning this dynamic body (mass, elasticity, locked rotation, etc...)</p>
+<h3 id="create-a-staticbodycomponent"><a class="header" href="#create-a-staticbodycomponent"><strong>Create a StaticBodyComponent</strong></a></h3>
+<p>Just like previously mentioned, Components authored by Chai follow the convention of custom Components creation methods structured (New + ComponentName).</p>
+<pre><code class="language-go">    _entity := _this_scene.NewEntityId()
+    _vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    
+    _sb_settings := chai.StaticBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _vt.Dimensions,
+        StartRotation: _vt.Rotation,
+        Friction: 0.3, Elasticity: 0.25,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+
+    _sb_component := chai.NewStaticBody(_entity, _vt, &amp;_sb_settings)
+    
+    _this_scene.AddComponents(_entity, chai.ToComponent(_vt), chai.ToComponent(_sb_component))
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+</code></pre>
+<h4 id="lets-discuss-staticbodysettings"><a class="header" href="#lets-discuss-staticbodysettings"><strong>Let's discuss "StaticBodySettings"</strong></a></h4>
+<pre><code class="language-go">type StaticBodySettings struct {
+	IsTrigger            bool
+	ColliderShape        int
+	Offset               Vector2f
+	StartDimensions      Vector2f
+	StartRotation        float32
+	Friction, Elasticity float32
+	PhysicsLayer         uint16
+}
+</code></pre>
+<p><strong>IsTrigger:</strong> Whether the body is trigger (passsable) or not</p>
+<p><strong>ColliderShape:</strong> There are 2 shapes currently (SHAPE_RECTBODY, SHAPE_CIRCLEBODY)</p>
+<p><strong>Offset:</strong> A position offset that can be modified in runtime</p>
+<p><strong>StartDimensions:</strong> The body's starting dimensions</p>
+<p><strong>StartRotation:</strong> The body's starting rotation</p>
+<p><strong>Friction:</strong> The body's friction with other body's</p>
+<p><strong>Elasticity:</strong> The body's bounciness</p>
+<p><strong>PhysicsLayer:</strong> The body's interaction physical layer</p>
+<hr />
+<h3 id="usage-example-1"><a class="header" href="#usage-example-1"><strong>Usage Example</strong></a></h3>
+<pre><code class="language-go">func SceneStartSystem(_this_scene *chai.Scene) {
+    _db_entity := _this_scene.NewEntityId()
+    _db_vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, 0.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(100.0, 100.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    _texture := chai.LoadPng("chai_logo.png", &amp;chai.TextureSettings{
+        Filter: chai.TEXTURE_FILTER_LINEAR,
+    })
+    _db_sprite_component := chai.NewSpriteComponent(_this_scene, _db_entity, _db_vt, &amp;_texture, false)
+
+    _db_settings := chai.DynamicBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        StartPosition: _db_vt.Position,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _db_vt.Dimensions,
+        StartRotation: _db_vt.Rotation,
+        Mass: 20, Friction: 0.3, Elasticity: 0.25,
+        ConstrainRotation: false,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+    _db_component := chai.NewDynamicBodyComponent(_db_entity, _db_vt, &amp;_db_settings)
+
+    _this_scene.AddComponents(_db_entity, chai.ToComponent(_db_vt), chai.ToComponent(_db_sprite_component), chai.ToComponent(_db_component))
+    
+    _sb_entity := _this_scene.NewEntityId()
+    _sb_vt := chai.VisualTransform{
+        Position: chai.NewVector2f(0.0, -200.0),
+        Z: 0.0,
+        Dimensions: chai.NewVector2f(400.0, 50.0),
+        Rotation: 0.0,
+        Scale: 1.0,
+        Tint: chai.WHITE,
+        UV1: chai.Vector2fZero,
+        UV2: chai.Vector2fOne,
+    }
+    
+    _sb_settings := chai.StaticBodySettings{
+        IsTrigger: false,
+        ColliderShape: chai.SHAPE_RECTBODY,
+        Offset: chai.Vector2fZero,
+        StartDimensions: _sb_vt.Dimensions,
+        StartRotation: _sb_vt.Rotation,
+        Friction: 0.3, Elasticity: 0.25,
+        PhysicsLayer: chai.PHYSICS_LAYER_ALL,
+    }
+
+    _sb_component := chai.NewStaticBodyComponent(_sb_entity, _sb_vt, &amp;_sb_settings)
+    
+    _this_scene.AddComponents(_sb_entity, chai.ToComponent(_sb_vt), chai.ToComponent(_sb_component))
+
+
+    _this_scene.NewUpdateSystem(chai.DynamicBodySystem)
+    _this_scene.NewUpdateSystem(chai.DebugBodyDrawSystem)
+}
+
+var app chai.App = chai.App{
+	Title:  "Docs",
+	Width:  480,
+	Height: 480,
+	OnStart: func() {
+		_test_scene := chai.NewScene()
+		_test_scene.NewStartSystem(SceneStartSystem)
+
+		// Transition into this scene
+		chai.ChangeScene(&amp;_test_scene)
+	},
+}
+
+func main(){
+	chai.Run(&amp;app)
+}
+</code></pre>
+<p><img src="Components/../../resources/static_example.gif" alt="StaticBody Example Output" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="vector2f"><a class="header" href="#vector2f">Vector2f</a></h1>
 <pre><code class="language-go">type Vector2f struct {
 	X float32
@@ -1008,6 +1481,92 @@ chai.LogF("Color: %v", _color1)
 </code></pre>
 <h3 id="rgba8-methods"><a class="header" href="#rgba8-methods"><strong>RGBA8 Methods</strong></a></h3>
 <pre><code class="language-go">chai.LogF("[Color]: %v", chai.GetRandomRGBA8()) // Returns a Random Color.
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chaievent"><a class="header" href="#chaievent">ChaiEvent</a></h1>
+<p>ChaiEvent is the take of Chai Engine upon Events and Listeners. What is an Event? It's a collection of Methods that of similar structure that get called all at once when the Event itself is Invoked.
+What's the use of an Event when you can call the methods themself? Well the benefit is that the Event fires whether there are methods added to it or not. This enables a more detached code that will be less error prone.</p>
+<pre><code class="language-go">package main
+
+import (
+	chai "github.com/mhamedGd/chai"
+)
+
+var app chai.App = chai.App {
+    Title: "",
+    Width: 1920,
+    Height: 1080,
+    OnStart: func(){
+        _test_chai_event := chai.NewChaiEvent()
+        _test_chai_event.AddListener(PrintYes)
+        _test_chai_event.AddListener(PrintNo)
+
+        _test_chai_event.Invoke()
+    },
+    OnUpdate: func(_delta_time float32){},
+    OnDraw: func(_delta_time float32){},
+    OnEvent: func(_event *AppEvent){},
+}
+
+func PrintYes() {
+    chai.LogF("Yes")
+}
+
+func PrintNo() {
+    chai.LogF("No")
+}
+
+func main() {
+    chai.Run(&amp;app)
+}
+</code></pre>
+<p><strong>Output</strong>
+<img src="CustomTypes/../../resources/event_example.png" alt="ChaiEvent Output" /></p>
+<h3 id="chaievents-with-parameters"><a class="header" href="#chaievents-with-parameters"><strong>ChaiEvents with Parameters</strong></a></h3>
+<pre><code class="language-go">type ChaiEvent1[A any] struct
+type ChaiEvent2[A, B any] struct
+type ChaiEvent3[A, B, C any] struct
+type ChaiEvent4[A, B, C, D any] struct
+type ChaiEvent5[A, B, C, D, E any] struct
+</code></pre>
+<p>In-order to Call a function that takes a parameter you need the specific ChaiEvent, Each ChaiEvent listed (1-&gt;5) takes a different number of parameters.</p>
+<p><strong>Let's Checkout a ChaiEvent with a single parameter</strong></p>
+<pre><code class="language-go">var app chai.App = chai.App {
+    Title: "",
+    Width: 1920,
+    Height: 1080,
+    OnStart: func(){
+        _test_chai_event := chai.NewChaiEvent1[string]()
+        _test_chai_event.AddListener(Print)
+
+        _test_chai_event.Invoke("Yes")
+        _test_chai_event.Invoke("No")
+    },
+    OnUpdate: func(_delta_time float32){},
+    OnDraw: func(_delta_time float32){},
+    OnEvent: func(_event *chai.AppEvent){},
+}
+
+func Print(_message string) {
+    chai.LogF(_message)
+}
+
+func main() {
+    chai.Run(&amp;app)
+}
+</code></pre>
+<p><strong>Output</strong>
+<img src="CustomTypes/../../resources/event_example.png" alt="ChaiEvent Output" /></p>
+<h3 id="chaievent-methods"><a class="header" href="#chaievent-methods"><strong>ChaiEvent Methods</strong></a></h3>
+<pre><code>    _test_chai_event := chai.NewChaiEvent()
+    _test_chai_event := chai.NewChaiEvent1[string]()
+    _test_chai_event := chai.NewChaiEvent2[string, int]()
+    _test_chai_event := chai.NewChaiEvent3[string, int, string]()
+    _test_chai_event := chai.NewChaiEvent4[string, int, string, float32]()
+    _test_chai_event := chai.NewChaiEvent5[string, int, string, float32, bool]()
+    
+    _test_chai_event.AddListener(_method_name)
+    _test_chai_event.RemoveListener(_method_name)
+    _test_chai_event.Invoke(_parameters_if_any)
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="texture"><a class="header" href="#texture">Texture</a></h1>
 <pre><code class="language-go">type Texture2D struct {
